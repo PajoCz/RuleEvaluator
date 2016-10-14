@@ -49,5 +49,17 @@ namespace RuleEvaluator.Test
             });
             Assert.AreEqual("ReturnValue2", items.Find("Anything", "Anything2", "Anything3", "MyString", 15m).Output(0).FilterValue);
         }
+
+        [Test]
+        public void IntegrityTest_FindAll_Test1()
+        {
+            RuleItems items = new RuleItems(new List<RuleItem>()
+            {
+                new RuleItem(".*", ".*", ".*", "MyString", "Interval<10,15>", new Cell("ReturnValue1", CellInputOutputType.Output)),
+                new RuleItem(".*", ".*", ".*", "MyString", "INTERVAL<15,24)", new Cell("ReturnValue2", CellInputOutputType.Output)),
+                new RuleItem(".*", ".*", ".*", "MyString", "INTERVAL(50,100)", new Cell("ReturnValue2", CellInputOutputType.Output)),
+            });
+            Assert.AreEqual(2, items.FindAll("Anything", "Anything2", "Anything3", "MyString", 15m).Count);
+        }
     }
 }
