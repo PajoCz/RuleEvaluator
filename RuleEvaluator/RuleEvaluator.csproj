@@ -45,6 +45,7 @@
     <Compile Include="CellValidateModuleDecimal.cs" />
     <Compile Include="CellValidateFilterDecimal.cs" />
     <Compile Include="CellValidateFilterAttribute.cs" />
+    <Compile Include="CellValidateModuleDetector.cs" />
     <Compile Include="CellValidateModuleRegex.cs" />
     <Compile Include="ICellValidateModule.cs" />
     <Compile Include="RuleItem.cs" />

@@ -14,9 +14,10 @@ namespace RuleEvaluator
         public RuleItem(params object[] p_Cells)
         {
             Cells = new List<Cell>(p_Cells.Length);
+            CellValidateModuleDetector detector = new CellValidateModuleDetector();
             foreach (var cell in p_Cells)
             {
-                Cells.Add(cell is Cell ? cell as Cell : new Cell(cell, new CellValidateModuleRegex()));
+                Cells.Add(cell is Cell ? cell as Cell : new Cell(cell, detector.DetectByFilterData(cell)));
             }
         }
 

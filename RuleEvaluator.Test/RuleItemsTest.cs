@@ -29,12 +29,12 @@ namespace RuleEvaluator.Test
         }
 
         [Test]
-        public void IntegrityTest_Find_OneFromMoreRuleItems_CellValidateDecimalWithoutExplicitSpecifyModule_ReturnsCorrectOutputValue()
+        public void IntegrityTest_Find_OneFromMoreRuleItems_CellValidateDecimalByDetector_ReturnsCorrectOutputValue()
         {
             RuleItems items = new RuleItems(new List<RuleItem>()
             {
-                new RuleItem(".*", ".*", ".*", "MyString", Cell.CreateByFilterModule(new CellValidateFilterDecimal(10, true, 15, false)), new Cell("ReturnValue1", CellInputOutputType.Output)),
-                new RuleItem(".*", ".*", ".*", "MyString", Cell.CreateByFilterModule(new CellValidateFilterDecimal(15, true, 24, false)), new Cell("ReturnValue2", CellInputOutputType.Output)),
+                new RuleItem(".*", ".*", ".*", "MyString", new CellValidateFilterDecimal(10, true, 15, false), new Cell("ReturnValue1", CellInputOutputType.Output)),
+                new RuleItem(".*", ".*", ".*", "MyString", new CellValidateFilterDecimal(15, true, 24, false), new Cell("ReturnValue2", CellInputOutputType.Output)),
             });
             Assert.AreEqual("ReturnValue2", items.Find("Anything", "Anything2", "Anything3", "MyString", 20m).Output(0).FilterValue);
         }

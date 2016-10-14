@@ -23,14 +23,6 @@ namespace RuleEvaluator
             InputOutputType = p_CellInputOutputTypeType;
         }
 
-        public static Cell CreateByFilterModule(object p_FilterValue)
-        {
-            var validateModuleType = p_FilterValue.GetType().GetCustomAttribute<CellValidateFilterAttribute>().ValidateModule;
-            var validationModuleInstance = Activator.CreateInstance(validateModuleType);
-            if (!(validationModuleInstance is ICellValidateModule)) throw new Exception($"ValidateModule of type {validateModuleType} does not implement interface {typeof(ICellValidateModule)}");
-            return new Cell(p_FilterValue, (ICellValidateModule)validationModuleInstance);
-        }
-
         public bool Validate(object p_Value)
         {
             return CellValidateModuleModule.Validate(FilterValue, p_Value);
