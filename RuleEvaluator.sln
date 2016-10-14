@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuleEvaluator", "RuleEvalua
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuleEvaluator.Test", "RuleEvaluator.Test\RuleEvaluator.Test.csproj", "{1B0F0B09-E330-4C8E-AC97-0B085378BF4C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuleEvaluator.Repository.Database", "RuleEvaluator.Repository.Database\RuleEvaluator.Repository.Database.csproj", "{510F4425-288C-44A4-952C-F83DC5AEF623}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuleEvaluator.Repository.Database.Test", "RuleEvaluator.Repository.Database.Test\RuleEvaluator.Repository.Database.Test.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{1B0F0B09-E330-4C8E-AC97-0B085378BF4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B0F0B09-E330-4C8E-AC97-0B085378BF4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B0F0B09-E330-4C8E-AC97-0B085378BF4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{510F4425-288C-44A4-952C-F83DC5AEF623}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{510F4425-288C-44A4-952C-F83DC5AEF623}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{510F4425-288C-44A4-952C-F83DC5AEF623}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{510F4425-288C-44A4-952C-F83DC5AEF623}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
