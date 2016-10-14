@@ -1,6 +1,6 @@
 ﻿namespace RuleEvaluator
 {
-    public interface ICellValidate
+    public interface ICellValidateModule
     {
         bool Validate(object p_CellFilter, object p_ValueDataForValidating);
     }

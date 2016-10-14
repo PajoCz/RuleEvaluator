@@ -75,7 +75,7 @@ namespace RuleEvaluator.Test
         public void Validate_NotSetValidateModule_DefaultSetCellValidateRegex()
         {
             Cell cell = new Cell("[1-2]");
-            Assert.AreEqual(typeof(CellValidateRegex), cell.CellValidateModule.GetType());
+            Assert.AreEqual(typeof(CellValidateModuleRegex), cell.CellValidateModuleModule.GetType());
         }
 
 

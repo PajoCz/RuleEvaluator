@@ -42,10 +42,11 @@
   <ItemGroup>
     <Compile Include="Cell.cs" />
     <Compile Include="CellInputOutputType.cs" />
-    <Compile Include="CellValidateDecimal.cs" />
-    <Compile Include="CellValidateDecimalFilter.cs" />
-    <Compile Include="CellValidateRegex.cs" />
-    <Compile Include="ICellValidate.cs" />
+    <Compile Include="CellValidateModuleDecimal.cs" />
+    <Compile Include="CellValidateFilterDecimal.cs" />
+    <Compile Include="CellValidateFilterAttribute.cs" />
+    <Compile Include="CellValidateModuleRegex.cs" />
+    <Compile Include="ICellValidateModule.cs" />
     <Compile Include="RuleItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuleItems.cs" />

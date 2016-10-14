@@ -1,8 +1,9 @@
 ﻿namespace RuleEvaluator
 {
-    public class CellValidateDecimalFilter
+    [CellValidateFilter(ValidateModule = typeof(CellValidateModuleDecimal))]
+    public class CellValidateFilterDecimal
     {
-        public CellValidateDecimalFilter(decimal p_From, bool p_FromIncluding, decimal p_To, bool p_ToIncluding)
+        public CellValidateFilterDecimal(decimal p_From, bool p_FromIncluding, decimal p_To, bool p_ToIncluding)
         {
             From = p_From;
             FromIncluding = p_FromIncluding;
@@ -10,7 +11,7 @@
             ToIncluding = p_ToIncluding;
         }
 
-        public CellValidateDecimalFilter()
+        public CellValidateFilterDecimal()
         {
         }
 

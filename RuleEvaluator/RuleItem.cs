@@ -16,7 +16,7 @@ namespace RuleEvaluator
             Cells = new List<Cell>(p_Cells.Length);
             foreach (var cell in p_Cells)
             {
-                Cells.Add(cell is Cell ? cell as Cell : new Cell(cell, new CellValidateRegex()));
+                Cells.Add(cell is Cell ? cell as Cell : new Cell(cell, new CellValidateModuleRegex()));
             }
         }
 

@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace RuleEvaluator
 {
-    public class CellValidateRegex: ICellValidate
+    public class CellValidateModuleRegex: ICellValidateModule
     {
         public bool Validate(object p_CellFilter, object p_ValueDataForValidating)
         {

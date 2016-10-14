@@ -22,11 +22,21 @@ namespace RuleEvaluator.Test
         {
             RuleItems items = new RuleItems(new List<RuleItem>()
             {
-                new RuleItem(".*", ".*", ".*", "7BN Perspektiva Důchod", new Cell(new CellValidateDecimalFilter(10, true, 15, false), new CellValidateDecimal()), new Cell("C2/400", CellInputOutputType.Output)),
-                new RuleItem(".*", ".*", ".*", "7BN Perspektiva Důchod", new Cell(new CellValidateDecimalFilter(15, true, 24, false), new CellValidateDecimal()), new Cell("C2/240", CellInputOutputType.Output)),
+                new RuleItem(".*", ".*", ".*", "7BN Perspektiva Důchod", new Cell(new CellValidateFilterDecimal(10, true, 15, false), new CellValidateModuleDecimal()), new Cell("C2/400", CellInputOutputType.Output)),
+                new RuleItem(".*", ".*", ".*", "7BN Perspektiva Důchod", new Cell(new CellValidateFilterDecimal(15, true, 24, false), new CellValidateModuleDecimal()), new Cell("C2/240", CellInputOutputType.Output)),
             });
             Assert.AreEqual("C2/240", items.Find("Cokoliv", "Cokoliv2", "Cokoliv3", "7BN Perspektiva Důchod", 20m).Output(0).FilterValue);
         }
 
+        [Test]
+        public void IntegrityTest_Find_OneFromMoreRuleItems_CellValidateDecimalWithoutExplicitSpecifyModule_ReturnsCorrectOutputValue()
+        {
+            RuleItems items = new RuleItems(new List<RuleItem>()
+            {
+                new RuleItem(".*", ".*", ".*", "7BN Perspektiva Důchod", Cell.CreateByFilterModule(new CellValidateFilterDecimal(10, true, 15, false)), new Cell("C2/400", CellInputOutputType.Output)),
+                new RuleItem(".*", ".*", ".*", "7BN Perspektiva Důchod", Cell.CreateByFilterModule(new CellValidateFilterDecimal(15, true, 24, false)), new Cell("C2/240", CellInputOutputType.Output)),
+            });
+            Assert.AreEqual("C2/240", items.Find("Cokoliv", "Cokoliv2", "Cokoliv3", "7BN Perspektiva Důchod", 20m).Output(0).FilterValue);
+        }
     }
 }
