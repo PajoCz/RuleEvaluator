@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuleEvaluator", "RuleEvaluator\RuleEvaluator.csproj", "{C1228381-1F09-4C8B-A0C9-F30F11D64A59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuleEvaluator.Test", "RuleEvaluator.Test\RuleEvaluator.Test.csproj", "{1B0F0B09-E330-4C8E-AC97-0B085378BF4C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C1228381-1F09-4C8B-A0C9-F30F11D64A59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1228381-1F09-4C8B-A0C9-F30F11D64A59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1228381-1F09-4C8B-A0C9-F30F11D64A59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1228381-1F09-4C8B-A0C9-F30F11D64A59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B0F0B09-E330-4C8E-AC97-0B085378BF4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B0F0B09-E330-4C8E-AC97-0B085378BF4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B0F0B09-E330-4C8E-AC97-0B085378BF4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B0F0B09-E330-4C8E-AC97-0B085378BF4C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
