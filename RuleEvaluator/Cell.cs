@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using System.Runtime.Serialization;
 
 namespace RuleEvaluator
 {
@@ -10,7 +11,7 @@ namespace RuleEvaluator
         public readonly CellInputOutputType InputOutputType;
 
         public Cell(object p_FilterValue, CellInputOutputType p_CellInputOutputType = CellInputOutputType.Input)
-            : this(p_FilterValue, new CellValidateModuleRegex(), p_CellInputOutputType)
+            : this(p_FilterValue, new CellValidateModuleDetector().DetectByFilterData(p_FilterValue), p_CellInputOutputType)
         {
         }
 

@@ -42,8 +42,8 @@
   <ItemGroup>
     <Compile Include="Cell.cs" />
     <Compile Include="CellInputOutputType.cs" />
-    <Compile Include="CellValidateModuleDecimal.cs" />
-    <Compile Include="CellValidateFilterDecimal.cs" />
+    <Compile Include="CellValidateModuleDecimalInterval.cs" />
+    <Compile Include="CellValidateFilterDecimalInterval.cs" />
     <Compile Include="CellValidateFilterAttribute.cs" />
     <Compile Include="CellValidateModuleDetector.cs" />
     <Compile Include="CellValidateModuleRegex.cs" />

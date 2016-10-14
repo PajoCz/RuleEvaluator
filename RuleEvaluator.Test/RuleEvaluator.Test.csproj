@@ -52,7 +52,8 @@
   <ItemGroup>
     <Compile Include="CellTest.cs" />
     <Compile Include="CellValidateFilterDecimalTest.cs" />
-    <Compile Include="CellValidateModuleDecimalTest.cs" />
+    <Compile Include="CellValidateModuleDecimalRangeTest.cs" />
+    <Compile Include="CellValidateModuleDetectorTest.cs" />
     <Compile Include="CellValidateModuleRegexTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuleItemsTest.cs" />
