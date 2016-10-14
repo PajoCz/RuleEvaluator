@@ -26,15 +26,15 @@ namespace RuleEvaluator.Repository.Database
             {
                 conn.Open();
 
-                List<ColumnIndexInOut> cols = SelectColumnsSettings(conn, p_Key);
-                var list = FillRuleItems(conn, p_Key, cols);
+                List<ColumnSettings> cols = CreateColumnSettings(conn, p_Key);
+                var list = CreateRuleItems(conn, p_Key, cols);
                 return new RuleItems(list);
             }
         }
 
-        private List<ColumnIndexInOut> SelectColumnsSettings(SqlConnection p_Connection, string p_SplParamInput)
+        private List<ColumnSettings> CreateColumnSettings(SqlConnection p_Connection, string p_SplParamInput)
         {
-            List<ColumnIndexInOut> result = new List<ColumnIndexInOut>();
+            List<ColumnSettings> result = new List<ColumnSettings>();
             var cmd = SqlCommand(p_Connection, _SplNameForColumns, _SplParamNameForKey, p_SplParamInput);
             using (var reader = cmd.ExecuteReader())
             {
@@ -42,13 +42,13 @@ namespace RuleEvaluator.Repository.Database
                 {
                     var colIndex = reader.GetInt32(0);
                     var isOut = Convert.ToBoolean(reader.GetInt32(1));
-                    result.Add(new ColumnIndexInOut(colIndex, isOut ? CellInputOutputType.Output : CellInputOutputType.Input));
+                    result.Add(new ColumnSettings(colIndex, isOut ? CellInputOutputType.Output : CellInputOutputType.Input));
                 }
             }
             return result;
         }
 
-        private List<RuleItem> FillRuleItems(SqlConnection p_Connection, string p_SplParamInput, List<ColumnIndexInOut> p_Columns)
+        private List<RuleItem> CreateRuleItems(SqlConnection p_Connection, string p_SplParamInput, List<ColumnSettings> p_Columns)
         {
             List<RuleItem> result = new List<RuleItem>();
             var cmd = SqlCommand(p_Connection, _SplNameForData, _SplParamNameForKey, p_SplParamInput);
@@ -78,9 +78,9 @@ namespace RuleEvaluator.Repository.Database
             return cmd;
         }
 
-        private class ColumnIndexInOut
+        private class ColumnSettings
         {
-            public ColumnIndexInOut(int p_Index, CellInputOutputType p_InputOutput)
+            public ColumnSettings(int p_Index, CellInputOutputType p_InputOutput)
             {
                 Index = p_Index;
                 InputOutput = p_InputOutput;
