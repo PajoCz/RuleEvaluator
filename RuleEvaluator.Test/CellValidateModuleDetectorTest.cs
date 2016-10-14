@@ -20,10 +20,17 @@ namespace RuleEvaluator.Test
         }
 
         [Test]
-        public void DetectByFilterData_InputStringRegex_ReturnsDecimalRange()
+        public void DetectByFilterData_InputStringRegex_ReturnsDecimalInterval()
         {
             var detector = new CellValidateModuleDetector();
             Assert.IsInstanceOf<CellValidateModuleDecimalInterval>(detector.DetectByFilterData(new CellValidateFilterDecimalInterval(1, true, 10, true)));
+        }
+
+        [Test]
+        public void DetectByFilterData_InputStringInterval_ReturnsDecimalInterval()
+        {
+            var detector = new CellValidateModuleDetector();
+            Assert.IsInstanceOf<CellValidateModuleDecimalInterval>(detector.DetectByFilterData("Interval(10,20)"));
         }
     }
 }
