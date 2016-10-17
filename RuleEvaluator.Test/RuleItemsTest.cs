@@ -1,4 +1,6 @@
-﻿using Castle.Windsor;
+﻿using System;
+using System.Diagnostics;
+using Castle.Windsor;
 using Castle.Windsor.Installer;
 using NCalc;
 using NUnit.Framework;
@@ -71,5 +73,16 @@ namespace RuleEvaluator.Test
             Assert.AreEqual(2, actual);
         }
 
+        //[Test]
+        //public void MemoryTest()
+        //{
+        //    for (int i = 0; i < 100000; i++)
+        //    {
+        //        RuleItems items = new RuleItems(_WindsorContainer);
+        //        items.AddRuleItem(".*", ".*", ".*", "MyString", "Interval<10;15)", new CellFactory(_WindsorContainer).CreateCell("C2/400", CellInputOutputType.Output));
+        //        items.AddRuleItem(".*", ".*", ".*", "MyString", "INTERVAL<15;24)", new CellFactory(_WindsorContainer).CreateCell("C2/240", CellInputOutputType.Output));
+        //        Debug.WriteLine($"{i} : {GC.GetTotalMemory(true)}");
+        //    }
+        //}
     }
 }

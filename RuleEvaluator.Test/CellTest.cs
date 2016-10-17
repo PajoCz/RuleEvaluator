@@ -73,6 +73,18 @@ namespace RuleEvaluator.Test
             Assert.IsFalse(cell.Validate(++input));
         }
 
+        /// <summary>
+        /// CellFactory only Resolve instance and never call Release.
+        /// So check that container is not tracking instance. Cell doesn't implement IDisposable (windsor castle is tracking disposable transient objects)
+        /// read this : http://tommarien.github.io/blog/2012/04/21/castle-windsor-avoid-memory-leaks-by-learning-the-underlying-mechanics/
+        /// </summary>
+        [Test]
+        public void ContainerWithoutTrackint_MeansTransientLifestyle()
+        {
+            var cell = new CellFactory(_WindsorContainer).CreateCell(10);
+            Assert.IsFalse(_WindsorContainer.Kernel.ReleasePolicy.HasTrack(cell));
+        }
+
 
 
 
