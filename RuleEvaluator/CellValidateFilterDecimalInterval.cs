@@ -2,7 +2,9 @@
 
 namespace RuleEvaluator
 {
-    [CellValidateFilter(ValidateModule = typeof(CellValidateModuleDecimalInterval))]
+    /// <summary>
+    /// Deserialized object of interval string syntax : INTERVAL[\(<]\d*,\d*\)>)
+    /// </summary>
     public class CellValidateFilterDecimalInterval
     {
         public CellValidateFilterDecimalInterval(decimal p_From, bool p_FromClosedIncluding, decimal p_To, bool p_ToClosedIncluding)

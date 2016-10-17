@@ -2,18 +2,21 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using Castle.Windsor;
 
 namespace RuleEvaluator.Repository.Database
 {
     public class RuleItemsRepository
     {
+        private readonly IWindsorContainer _Container;
         private readonly string _ConnectionString;
         private readonly string _SplNameForColumns;
         private readonly string _SplNameForData;
         private readonly string _SplParamNameForKey;
 
-        public RuleItemsRepository(string p_ConnectionString, string p_SplNameForColumns, string p_SplNameForData, string p_SplParamNameForKey = "Key")
+        public RuleItemsRepository(IWindsorContainer p_Container, string p_ConnectionString, string p_SplNameForColumns, string p_SplNameForData, string p_SplParamNameForKey = "Key")
         {
+            _Container = p_Container;
             _ConnectionString = p_ConnectionString;
             _SplNameForColumns = p_SplNameForColumns;
             _SplNameForData = p_SplNameForData;
@@ -27,8 +30,9 @@ namespace RuleEvaluator.Repository.Database
                 conn.Open();
 
                 List<ColumnSettings> cols = CreateColumnSettings(conn, p_Key);
-                var list = CreateRuleItems(conn, p_Key, cols);
-                return new RuleItems(list);
+                var result = new RuleItems(_Container);
+                FillRuleItems(conn, p_Key, cols, result);
+                return result;
             }
         }
 
@@ -48,9 +52,8 @@ namespace RuleEvaluator.Repository.Database
             return result;
         }
 
-        private List<RuleItem> CreateRuleItems(SqlConnection p_Connection, string p_SplParamInput, List<ColumnSettings> p_Columns)
+        private void FillRuleItems(SqlConnection p_Connection, string p_SplParamInput, List<ColumnSettings> p_Columns, RuleItems p_RuleItems)
         {
-            List<RuleItem> result = new List<RuleItem>();
             var cmd = SqlCommand(p_Connection, _SplNameForData, _SplParamNameForKey, p_SplParamInput);
             object[] cellValues = new object[p_Columns.Count];
             using (var reader = cmd.ExecuteReader())
@@ -60,13 +63,12 @@ namespace RuleEvaluator.Repository.Database
                     var i = 0;
                     foreach (var col in p_Columns)
                     {
-                        cellValues[i] = new Cell(reader.GetString(col.Index), col.InputOutput);
+                        cellValues[i] = new CellFactory(_Container).CreateCell(reader.GetString(col.Index), col.InputOutput);
                         i++;
                     }
-                    result.Add(new RuleItem(cellValues));
+                    p_RuleItems.AddRuleItem(cellValues);
                 }
             }
-            return result;
         }
 
         private static SqlCommand SqlCommand(SqlConnection p_ConnectionString, string p_SplName, string p_SplParamName, string p_SplParamValue)

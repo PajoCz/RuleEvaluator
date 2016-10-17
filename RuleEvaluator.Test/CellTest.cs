@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Castle.Windsor;
+using Castle.Windsor.Installer;
 using NUnit.Framework;
 
 namespace RuleEvaluator.Test
@@ -6,11 +7,21 @@ namespace RuleEvaluator.Test
     [TestFixture]
     public class CellTest
     {
+        private static IWindsorContainer _WindsorContainer
+        {
+            get
+            {
+                IWindsorContainer container = new WindsorContainer();
+                container.Install(FromAssembly.InThisApplication());
+                return container;
+            }
+        }
+
         [Test]
         public void Ctor_SetFilterValueInCtor_FilterValueIsSet()
         {
             string input = "Text";
-            Cell cell = new Cell(input);
+            var cell = new CellFactory(_WindsorContainer).CreateCell(input);
             Assert.AreEqual(input, cell.FilterValue);
         }
 
@@ -18,7 +29,7 @@ namespace RuleEvaluator.Test
         public void Ctor_SetFilterValueWithoutInputOutputType_ReturnsCellWithInputType()
         {
             string input = "Text";
-            Cell cell = new Cell(input);
+            var cell = new CellFactory(_WindsorContainer).CreateCell(input);
             Assert.AreEqual(CellInputOutputType.Input, cell.InputOutputType);
         }
 
@@ -26,24 +37,15 @@ namespace RuleEvaluator.Test
         public void Ctor_SetFilterValueAndOutputType_ReturnsCellWithOutputType()
         {
             string input = "Text";
-            Cell cell = new Cell(input, CellInputOutputType.Output);
+            var cell = new CellFactory(_WindsorContainer).CreateCell(input, CellInputOutputType.Output);
             Assert.AreEqual(CellInputOutputType.Output, cell.InputOutputType);
-        }
-
-        [Test]
-        public void Ctor_SetNullAsFilterValue_ThrowsArgumentNullException()
-        {
-            Assert.Throws<ArgumentNullException>(() =>
-            {
-                var cell = new Cell(null);
-            });
         }
 
         [Test]
         public void Validate_StringOriginal_ReturnTrue()
         {
             string input = "Text";
-            Cell cell = new Cell(input);
+            var cell = new CellFactory(_WindsorContainer).CreateCell(input);
             Assert.IsTrue(cell.Validate(input));
         }
 
@@ -51,7 +53,7 @@ namespace RuleEvaluator.Test
         public void Validate_StringChanged_ReturnFalse()
         {
             string input = "Text";
-            Cell cell = new Cell(input);
+            var cell = new CellFactory(_WindsorContainer).CreateCell(input);
             Assert.IsFalse(cell.Validate(input + "Changed"));
         }
 
@@ -59,7 +61,7 @@ namespace RuleEvaluator.Test
         public void Validate_IntOriginal_ReturnTrue()
         {
             int input = 10;
-            Cell cell = new Cell(input);
+            var cell = new CellFactory(_WindsorContainer).CreateCell(input);
             Assert.IsTrue(cell.Validate(input));
         }
 
@@ -67,16 +69,25 @@ namespace RuleEvaluator.Test
         public void Validate_IntIncremented_ReturnFalse()
         {
             int input = 10;
-            Cell cell = new Cell(input);
+            var cell = new CellFactory(_WindsorContainer).CreateCell(input);
             Assert.IsFalse(cell.Validate(++input));
         }
 
-        [Test]
-        public void Validate_NotSetValidateModule_DefaultSetCellValidateRegex()
-        {
-            Cell cell = new Cell("[1-2]");
-            Assert.AreEqual(typeof(CellValidateModuleRegex), cell.CellValidateModuleModule.GetType());
-        }
+
+
+
+
+
+
+
+
+
+        //[Test]
+        //public void Validate_NotSetValidateModule_DefaultSetCellValidateRegex()
+        //{
+        //    Cell cell = new Cell("[1-2]");
+        //    Assert.AreEqual(typeof(CellValidateModuleRegex), cell.CellValidateModuleModule.GetType());
+        //}
 
 
         //[Test]

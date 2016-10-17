@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace RuleEvaluator.Test
 {
     [TestFixture]
-    public class CellValidateModuleDecimalRangeTest
+    public class CellValidateModuleDecimalIntervalTest
     {
         [Test]
         public void Validate_CorrectTypes_NotThrownException()
@@ -49,7 +49,7 @@ namespace RuleEvaluator.Test
         /// <summary>
         /// TODO: Is integer correct input? Implement any conversion in Validate method and accept integer inputs?
         /// </summary>
-        [Test]        
+        [Test]
         public void Validate_ValueNotTypeOfDecimal_SetInteger_ThrowsException()
         {
             var validator = new CellValidateModuleDecimalInterval();

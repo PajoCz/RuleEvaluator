@@ -1,26 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using Castle.Windsor;
 
 namespace RuleEvaluator
 {
+    /// <summary>
+    /// One rule item with composition of List<ICell> with ValidateInput method
+    /// </summary>
     public class RuleItem
     {
-        public readonly List<Cell> Cells;
+        public readonly List<ICell> Cells;
 
-        private List<Cell> _CellsOnlyInputCached;
+        private List<ICell> _CellsOnlyInputCached;
 
-        private List<Cell> _CellsOnlyOutputCached;
+        private List<ICell> _CellsOnlyOutputCached;
 
-        public RuleItem(params object[] p_Cells)
+        public RuleItem(IWindsorContainer p_Container, params object[] p_Cells)
         {
-            Cells = new List<Cell>(p_Cells.Length);
+            Cells = new List<ICell>(p_Cells.Length);
             foreach (var cell in p_Cells)
             {
-                Cells.Add(cell is Cell ? cell as Cell : new Cell(cell));
+                Cells.Add(cell is ICell ? cell as ICell : new CellFactory(p_Container).CreateCell(cell));
             }
         }
 
-        public List<Cell> CellsOnlyInput
+        public List<ICell> CellsOnlyInput
         {
             get
             {
@@ -32,7 +36,7 @@ namespace RuleEvaluator
             }
         }
 
-        public List<Cell> CellsOnlyOutput
+        public List<ICell> CellsOnlyOutput
         {
             get
             {
@@ -59,7 +63,7 @@ namespace RuleEvaluator
             return true;
         }
 
-        public Cell Output(int p_OutputIndex)
+        public ICell Output(int p_OutputIndex)
         {
             return CellsOnlyOutput[p_OutputIndex];
         }

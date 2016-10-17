@@ -2,6 +2,6 @@
 {
     public interface ICellValidateModule
     {
-        bool Validate(object p_CellFilter, object p_ValueDataForValidating);
+        bool? Validate(object p_CellFilter, object p_ValueDataForValidating);
     }
 }

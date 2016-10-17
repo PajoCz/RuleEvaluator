@@ -3,7 +3,7 @@
 namespace RuleEvaluator.Test
 {
     [TestFixture]
-    public class CellValidateFilterDecimalTest
+    public class CellValidateFilterDecimalIntervalTest
     {
         [TestCase(-20, ExpectedResult = false)]
         [TestCase(-10.001, ExpectedResult = false)]
@@ -74,7 +74,7 @@ namespace RuleEvaluator.Test
         [TestCase("INTERVAL(10,2000]")]
         [TestCase("INTERVAL(10,2000,50)")]
         [TestCase("INTERVAL(A,B)")]
-        public void CreateFromString_Incorrect(string p_Text)
+        public void CreateFromString_IncorrectReturnNull(string p_Text)
         {
             Assert.IsNull(CellValidateFilterDecimalInterval.CreateFromString(p_Text));
         }

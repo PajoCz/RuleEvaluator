@@ -4,7 +4,7 @@ namespace RuleEvaluator.Test
 {
     [TestFixture]
     public class CellValidateModuleRegexTest
-    {        
+    {
         [TestCase("1[1-9]", 11, ExpectedResult = true)]
         [TestCase("1[1-9]", 11d, ExpectedResult = true)]
         [TestCase("1[1-9]", "11", ExpectedResult = true)]
@@ -17,7 +17,7 @@ namespace RuleEvaluator.Test
         [TestCase("1[1-9]", "20", ExpectedResult = false)]
         [TestCase("1[1-9]", 111, ExpectedResult = false)]
         [TestCase("1[1-9]", "111", ExpectedResult = false)]
-        public bool Validate_ValueDataNotNull(object p_CellFilter, object p_ValueDataForValidating)
+        public bool? Validate_ValueDataNotNull(object p_CellFilter, object p_ValueDataForValidating)
         {
             CellValidateModuleRegex validateModule = new CellValidateModuleRegex();
             return validateModule.Validate(p_CellFilter, p_ValueDataForValidating);
@@ -25,11 +25,10 @@ namespace RuleEvaluator.Test
 
         [TestCase("1[1-9]", null, ExpectedResult = false)]
         [TestCase(".*", null, ExpectedResult = true)]
-        public bool Validate_ValueDataNull(object p_CellFilter, object p_ValueDataForValidating)
+        public bool? Validate_ValueDataNull(object p_CellFilter, object p_ValueDataForValidating)
         {
             CellValidateModuleRegex validateModule = new CellValidateModuleRegex();
             return validateModule.Validate(p_CellFilter, p_ValueDataForValidating);
         }
-
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Castle.Windsor;
+using Castle.Windsor.Installer;
 using NUnit.Framework;
 
 namespace RuleEvaluator.Test
@@ -6,59 +7,52 @@ namespace RuleEvaluator.Test
     [TestFixture]
     public class RuleItemsTest
     {
-        [Test]
-        public void IntegrityTest_Find_OneFromMoreRuleItems_ReturnsCorrectOutputValue()
+        private static IWindsorContainer _WindsorContainer
         {
-            RuleItems items = new RuleItems(new List<RuleItem>()
+            get
             {
-                new RuleItem(".*", ".*", ".*", "MyString", "1[0-4]", new Cell("ReturnValue1", CellInputOutputType.Output)),
-                new RuleItem(".*", ".*", ".*", "MyString", "1[5-9]|2[0-4]", new Cell("ReturnValue2", CellInputOutputType.Output)),
-            });
-            Assert.AreEqual("ReturnValue2" ,items.Find("Anything", "Anything2", "Anything3", "MyString", "15").Output(0).FilterValue);
+                IWindsorContainer container = new WindsorContainer();
+                container.Install(FromAssembly.InThisApplication());
+                return container;
+            }
         }
 
         [Test]
-        public void IntegrityTest_Find_OneFromMoreRuleItems_CellValidateDecimal_ReturnsCorrectOutputValue()
+        public void IntegrityTest_Find_OneFromMoreRuleItems_ReturnsCorrectOutputValue()
         {
-            RuleItems items = new RuleItems(new List<RuleItem>()
-            {
-                new RuleItem(".*", ".*", ".*", "MyString", new Cell(new CellValidateFilterDecimalInterval(10, true, 15, false), new CellValidateModuleDecimalInterval()), new Cell("ReturnValue1", CellInputOutputType.Output)),
-                new RuleItem(".*", ".*", ".*", "MyString", new Cell(new CellValidateFilterDecimalInterval(15, true, 24, false), new CellValidateModuleDecimalInterval()), new Cell("ReturnValue2", CellInputOutputType.Output)),
-            });
-            Assert.AreEqual("ReturnValue2", items.Find("Anything", "Anything2", "Anything3", "MyString", 20m).Output(0).FilterValue);
+            RuleItems items = new RuleItems(_WindsorContainer);
+            items.AddRuleItem(".*", ".*", ".*", "MyString", "1[0-4]", new CellFactory(_WindsorContainer).CreateCell("ReturnValue1", CellInputOutputType.Output));
+            items.AddRuleItem(".*", ".*", ".*", "MyString", "1[5-9]|2[0-4]", new CellFactory(_WindsorContainer).CreateCell("ReturnValue2", CellInputOutputType.Output));
+            Assert.AreEqual("ReturnValue2", items.Find("Anything", "Anything2", "Anything3", "MyString", "15").Output(0).FilterValue);
         }
 
         [Test]
         public void IntegrityTest_Find_OneFromMoreRuleItems_CellValidateDecimalByDetector_ReturnsCorrectOutputValue()
         {
-            RuleItems items = new RuleItems(new List<RuleItem>()
-            {
-                new RuleItem(".*", ".*", ".*", "MyString", new CellValidateFilterDecimalInterval(10, true, 15, false), new Cell("ReturnValue1", CellInputOutputType.Output)),
-                new RuleItem(".*", ".*", ".*", "MyString", new CellValidateFilterDecimalInterval(15, true, 24, false), new Cell("ReturnValue2", CellInputOutputType.Output)),
-            });
+            RuleItems items = new RuleItems(_WindsorContainer);
+            items.AddRuleItem(".*", ".*", ".*", "MyString", new CellFactory(_WindsorContainer).CreateCell(new CellValidateFilterDecimalInterval(10, true, 15, false)),
+                new CellFactory(_WindsorContainer).CreateCell("ReturnValue1", CellInputOutputType.Output));
+            items.AddRuleItem(".*", ".*", ".*", "MyString", new CellFactory(_WindsorContainer).CreateCell(new CellValidateFilterDecimalInterval(15, true, 24, false)),
+                new CellFactory(_WindsorContainer).CreateCell("ReturnValue2", CellInputOutputType.Output));
             Assert.AreEqual("ReturnValue2", items.Find("Anything", "Anything2", "Anything3", "MyString", 20m).Output(0).FilterValue);
         }
 
         [Test]
         public void IntegrityTest_Find_OneFromMoreRuleItems_IntervalStringAsCellValidateFilterDecimal_ReturnsCorrectOutputValue()
         {
-            RuleItems items = new RuleItems(new List<RuleItem>()
-            {
-                new RuleItem(".*", ".*", ".*", "MyString", "Interval<10,15)", new Cell("ReturnValue1", CellInputOutputType.Output)),
-                new RuleItem(".*", ".*", ".*", "MyString", "INTERVAL<15,24)", new Cell("ReturnValue2", CellInputOutputType.Output)),
-            });
+            RuleItems items = new RuleItems(_WindsorContainer);
+            items.AddRuleItem(".*", ".*", ".*", "MyString", "Interval<10,15)", new CellFactory(_WindsorContainer).CreateCell("ReturnValue1", CellInputOutputType.Output));
+            items.AddRuleItem(".*", ".*", ".*", "MyString", "INTERVAL<15,24)", new CellFactory(_WindsorContainer).CreateCell("ReturnValue2", CellInputOutputType.Output));
             Assert.AreEqual("ReturnValue2", items.Find("Anything", "Anything2", "Anything3", "MyString", 15m).Output(0).FilterValue);
         }
 
         [Test]
         public void IntegrityTest_FindAll_Test1()
         {
-            RuleItems items = new RuleItems(new List<RuleItem>()
-            {
-                new RuleItem(".*", ".*", ".*", "MyString", "Interval<10,15>", new Cell("ReturnValue1", CellInputOutputType.Output)),
-                new RuleItem(".*", ".*", ".*", "MyString", "INTERVAL<15,24)", new Cell("ReturnValue2", CellInputOutputType.Output)),
-                new RuleItem(".*", ".*", ".*", "MyString", "INTERVAL(50,100)", new Cell("ReturnValue2", CellInputOutputType.Output)),
-            });
+            RuleItems items = new RuleItems(_WindsorContainer);
+            items.AddRuleItem(".*", ".*", ".*", "MyString", "Interval<10,15>", new CellFactory(_WindsorContainer).CreateCell("ReturnValue1", CellInputOutputType.Output));
+            items.AddRuleItem(".*", ".*", ".*", "MyString", "INTERVAL<15,24)", new CellFactory(_WindsorContainer).CreateCell("ReturnValue2", CellInputOutputType.Output));
+            items.AddRuleItem(".*", ".*", ".*", "MyString", "INTERVAL(50,100)", new CellFactory(_WindsorContainer).CreateCell("ReturnValue3", CellInputOutputType.Output));
             Assert.AreEqual(2, items.FindAll("Anything", "Anything2", "Anything3", "MyString", 15m).Count);
         }
     }

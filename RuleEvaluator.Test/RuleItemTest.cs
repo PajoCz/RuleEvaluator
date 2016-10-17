@@ -1,22 +1,34 @@
 ﻿using NUnit.Framework;
 using System;
+using Castle.Windsor;
+using Castle.Windsor.Installer;
 
 namespace RuleEvaluator.Test
 {
     [TestFixture]
     public class RuleItemTest
     {
+        private static IWindsorContainer _WindsorContainer
+        {
+            get
+            {
+                IWindsorContainer container = new WindsorContainer();
+                container.Install(FromAssembly.InThisApplication());
+                return container;
+            }
+        }
+
         [Test]
         public void Ctor_InputNotCellObject_AllCellAsInput()
         {
-            var ri = new RuleItem("text", 1);
+            var ri = new RuleItem(_WindsorContainer, "text", 1);
             ri.Cells.ForEach(c => Assert.AreEqual(CellInputOutputType.Input, c.InputOutputType));
         }
 
         [Test]
         public void Ctor_InputCellObject_CanSetCellOutput()
         {
-            var ri = new RuleItem("text", new Cell("vystup", CellInputOutputType.Output));
+            var ri = new RuleItem(_WindsorContainer, "text", new CellFactory(_WindsorContainer).CreateCell("vystup", CellInputOutputType.Output));
             Assert.AreEqual(CellInputOutputType.Output, ri.Cells[1].InputOutputType);
         }
 
@@ -25,7 +37,7 @@ namespace RuleEvaluator.Test
         {
             string cellInput1 = "input1";
             int cellInput2 = 1;
-            var ri = new RuleItem(cellInput1, cellInput2);
+            var ri = new RuleItem(_WindsorContainer, cellInput1, cellInput2);
             Assert.Throws<ArgumentOutOfRangeException>(() => ri.ValidateInput(cellInput1));
         }
 
@@ -34,7 +46,7 @@ namespace RuleEvaluator.Test
         {
             string cellInput1 = "input1";
             int cellInput2 = 1;
-            var ri = new RuleItem(cellInput1);
+            var ri = new RuleItem(_WindsorContainer, cellInput1);
             Assert.Throws<ArgumentOutOfRangeException>(() => ri.ValidateInput(cellInput1, cellInput2));
         }
 
@@ -43,7 +55,7 @@ namespace RuleEvaluator.Test
         {
             string cellInput1 = "input1";
             int cellInput2 = 1;
-            var ri = new RuleItem(cellInput1, new Cell("vystup", CellInputOutputType.Output), cellInput2);
+            var ri = new RuleItem(_WindsorContainer, cellInput1, new CellFactory(_WindsorContainer).CreateCell("vystup", CellInputOutputType.Output), cellInput2);
             Assert.IsTrue(ri.ValidateInput(cellInput1, cellInput2));
         }
     }

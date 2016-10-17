@@ -2,30 +2,36 @@ using System;
 
 namespace RuleEvaluator
 {
-    public class Cell
+    public class Cell : ICell
     {
-        public readonly ICellValidateModule CellValidateModuleModule;
-        public readonly object FilterValue;
-        public readonly CellInputOutputType InputOutputType;
+        /// <summary>
+        /// IoC injected validate module
+        /// </summary>
+        private readonly ICellValidateModule _CellValidateModuleModule;
+        /// <summary>
+        /// Cell filter value
+        /// </summary>
+        public object FilterValue { get; set; }
+        /// <summary>
+        /// Input cell value (used for looking in Validate method. Output cell is used for getting data from Validated RuleItem
+        /// </summary>
+        public CellInputOutputType InputOutputType { get; set; }
 
-        public Cell(object p_FilterValue, CellInputOutputType p_CellInputOutputType = CellInputOutputType.Input)
-            : this(p_FilterValue, new CellValidateModuleDetector().DetectByFilterData(p_FilterValue), p_CellInputOutputType)
+        public Cell(ICellValidateModule p_CellValidateModuleModule)
         {
-        }
-
-        public Cell(object p_FilterValue, ICellValidateModule p_CellValidateModuleModule, CellInputOutputType p_CellInputOutputTypeType = CellInputOutputType.Input)
-        {
-            if (p_FilterValue == null) throw new ArgumentNullException(nameof(p_FilterValue));
-
-            FilterValue = p_FilterValue;
-            CellValidateModuleModule = p_CellValidateModuleModule;
-            InputOutputType = p_CellInputOutputTypeType;
+            _CellValidateModuleModule = p_CellValidateModuleModule;
         }
 
         public bool Validate(object p_Value)
         {
-            return CellValidateModuleModule.Validate(FilterValue, p_Value);
-            //return FilterValue.Equals(p_FilterValue);
+            if (FilterValue == null) throw new ArgumentNullException(nameof(FilterValue));
+
+            bool? res = _CellValidateModuleModule.Validate(FilterValue, p_Value);
+            if (!res.HasValue)
+            {
+                throw new Exception("Uknown validate result from ICellValidateModule instances");
+            }
+            return res.Value;
         }
     }
 }
