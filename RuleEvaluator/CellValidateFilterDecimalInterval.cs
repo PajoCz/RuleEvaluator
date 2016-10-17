@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 namespace RuleEvaluator
 {
     /// <summary>
-    /// Deserialized object of interval string syntax : INTERVAL[\(<]\d*,\d*\)>)
+    /// Deserialized object of interval string syntax
     /// </summary>
     public class CellValidateFilterDecimalInterval
     {

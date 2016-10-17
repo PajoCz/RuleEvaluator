@@ -30,14 +30,6 @@ namespace RuleEvaluator.Test
             Assert.Throws<ArgumentNullException>(() => validator.Validate(filter, null));
         }
 
-        //[Test]
-        //public void Validate_FilterNotTypeOfCellValidateDecimalFilter_ThrowsException()
-        //{
-        //    var validator = new CellValidateModuleDecimalInterval();
-        //    var filter = new object();
-        //    Assert.Throws<ArgumentException>(() => validator.Validate(filter, 10m));
-        //}
-
         [Test]
         public void Validate_ValueNotTypeOfDecimal_ThrowsException()
         {
