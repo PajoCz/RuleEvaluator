@@ -53,13 +53,15 @@ namespace RuleEvaluator.Test
             return new CellValidateFilterDecimalInterval(-10m, true, 5m, true).Validate(p_Value);
         }
 
-        [TestCase("INTERVAL(10,2000)", 10, false, 2000, false)]
-        [TestCase("INTERVAL<10,2000)", 10, true, 2000, false)]
-        [TestCase("INTERVAL<10,2000>", 10, true, 2000, true)]
-        [TestCase("INTERVAL(10,2000>", 10, false, 2000, true)]
-        [TestCase(" INTERVAL ( 10, 2 000 ) ", 10, false, 2000, false)]
-        [TestCase(" IN TER VAL ( 10, 2 000 ) ", 10, false, 2000, false)]
-        [TestCase("Interval<10,15)", 10, true, 15, false)]
+        [TestCase("INTERVAL(10;2000)", 10, false, 2000, false)]
+        [TestCase("INTERVAL<10;2000)", 10, true, 2000, false)]
+        [TestCase("INTERVAL<10;2000>", 10, true, 2000, true)]
+        [TestCase("INTERVAL(10;2000>", 10, false, 2000, true)]
+        [TestCase(" INTERVAL ( 10; 2 000 ) ", 10, false, 2000, false)]
+        [TestCase(" IN TER VAL ( 10; 2 000 ) ", 10, false, 2000, false)]
+        [TestCase("Interval<10;15)", 10, true, 15, false)]
+        [TestCase("Interval<10.123;15,123)", 10.123, true, 15.123, false)]
+        [TestCase("Interval<10,123456789;15.123456789)", 10.123456789, true, 15.123456789, false)]
         public void CreateFromString_Correct(string p_Text, decimal p_From, bool p_FromIncluding, decimal p_To, bool p_ToIncluding)
         {
             var res = CellValidateFilterDecimalInterval.CreateFromString(p_Text);
@@ -70,10 +72,9 @@ namespace RuleEvaluator.Test
             Assert.AreEqual(p_ToIncluding, res.ToClosedIncluding);
         }
 
-        [TestCase("INTERVALY(10,2000)")]
-        [TestCase("INTERVAL(10,2000]")]
-        [TestCase("INTERVAL(10,2000,50)")]
-        [TestCase("INTERVAL(A,B)")]
+        [TestCase("INTERVALY(10;2000)")]
+        [TestCase("INTERVAL(10;2000]")]
+        [TestCase("INTERVAL(A;B)")]
         public void CreateFromString_IncorrectReturnNull(string p_Text)
         {
             Assert.IsNull(CellValidateFilterDecimalInterval.CreateFromString(p_Text));

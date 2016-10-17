@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace RuleEvaluator
 {
@@ -42,13 +43,16 @@ namespace RuleEvaluator
 
         public static CellValidateFilterDecimalInterval CreateFromString(string p_Data)
         {
-            Regex regex = new Regex(@"INTERVAL(?<FromOpenedClosed>[\(<])(?<FromNumber>\d*),(?<ToNumber>\d*)(?<ToOpenedClosed>[\)>])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-            var match = regex.Match(p_Data.Replace(" ",""));
+            //Regex regex = new Regex(@"INTERVAL(?<FromOpenedClosed>[\(<])(?<FromNumber>\d*),(?<ToNumber>\d*)(?<ToOpenedClosed>[\)>])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            Regex regex = new Regex(@"INTERVAL(?<FromOpenedClosed>[\(<])(?<FromNumber>[0-9]+([\.,\,][0-9]*)?);(?<ToNumber>[0-9]+([\.,\,][0-9]*)?)(?<ToOpenedClosed>[\)>])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            var match = regex.Match(p_Data.Replace(" ","").Replace(",","."));
             if (match.Success)
             {
-                decimal from = decimal.Parse(match.Groups["FromNumber"].Value);
+                var ci = CultureInfo.InvariantCulture.Clone() as CultureInfo;
+                ci.NumberFormat.NumberDecimalSeparator = ".";
+                decimal from = decimal.Parse(match.Groups["FromNumber"].Value.Replace(",","."), ci);
                 bool fromIncluding = match.Groups["FromOpenedClosed"].Value == "<";
-                decimal to = decimal.Parse(match.Groups["ToNumber"].Value);
+                decimal to = decimal.Parse(match.Groups["ToNumber"].Value.Replace(",","."), ci);
                 bool toIncluding = match.Groups["ToOpenedClosed"].Value == ">";
                 return new CellValidateFilterDecimalInterval(from, fromIncluding, to, toIncluding);
             }

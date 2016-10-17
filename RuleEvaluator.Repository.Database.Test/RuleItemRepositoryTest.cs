@@ -19,7 +19,7 @@ namespace RuleEvaluator.Repository.Database.Test
         }
 
         [Test]
-        public void IntegrateTest_RepoLoad_FindOneRuleItemAndCheckHisFilterValue()
+        public void IntegrateTest_RepoLoad_FindOneRuleItemAndCheckFilterValue()
         {
             var repo = new RuleItemsRepository(_WindsorContainer, ConfigurationManager.AppSettings.Get("ConnectionString"), "Ciselnik.p_GetSchemaColBySchemaKod", "Ciselnik.p_GetTranslatorDataBySchemaKod");
             var items = repo.Load("OdhadBodu");
