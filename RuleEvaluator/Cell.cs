@@ -7,26 +7,26 @@ namespace RuleEvaluator
         /// <summary>
         /// IoC injected validate module
         /// </summary>
-        private readonly ICellValidateModule _CellValidateModuleModule;
+        private readonly ICellValidateModule _CellValidateModule;
         /// <summary>
         /// Cell filter value
         /// </summary>
         public object FilterValue { get; set; }
         /// <summary>
-        /// Input cell value (used for looking in Validate method. Output cell is used for getting data from Validated RuleItem
+        /// Input cell value means used for looking in Validate method. Output cell means used for getting data from Validated RuleItem
         /// </summary>
         public CellInputOutputType InputOutputType { get; set; }
 
-        public Cell(ICellValidateModule p_CellValidateModuleModule)
+        public Cell(ICellValidateModule p_CellValidateModule)
         {
-            _CellValidateModuleModule = p_CellValidateModuleModule;
+            _CellValidateModule = p_CellValidateModule;
         }
 
         public bool Validate(object p_Value)
         {
             if (FilterValue == null) throw new ArgumentNullException(nameof(FilterValue));
 
-            bool? res = _CellValidateModuleModule.Validate(FilterValue, p_Value);
+            bool? res = _CellValidateModule.Validate(FilterValue, p_Value);
             if (!res.HasValue)
             {
                 throw new Exception("Uknown validate result from ICellValidateModule instances");
