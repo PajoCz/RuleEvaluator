@@ -39,39 +39,32 @@ namespace RuleEvaluator.Repository.Database
         private List<ColumnSettings> CreateColumnSettings(SqlConnection p_Connection, string p_SplParamInput)
         {
             List<ColumnSettings> result = new List<ColumnSettings>();
-            var cmd = SqlCommand(p_Connection, _SplNameForColumns, _SplParamNameForKey, p_SplParamInput);
-            using (var reader = cmd.ExecuteReader())
+            var cmd = CreateSqlCommand(p_Connection, _SplNameForColumns, _SplParamNameForKey, p_SplParamInput);
+            cmd.ExecuteReaderWithAction(reader =>
             {
-                while (reader.Read())
-                {
-                    var colIndex = reader.GetInt32(0);
-                    var isOut = Convert.ToBoolean(reader.GetInt32(1));
-                    result.Add(new ColumnSettings(colIndex, isOut ? CellInputOutputType.Output : CellInputOutputType.Input));
-                }
-            }
+                var colIndex = reader.GetInt32(0);
+                var isOut = Convert.ToBoolean(reader.GetInt32(1));
+                result.Add(new ColumnSettings(colIndex, isOut ? CellInputOutputType.Output : CellInputOutputType.Input));
+            });
             return result;
         }
 
         private void FillRuleItems(SqlConnection p_Connection, string p_SplParamInput, List<ColumnSettings> p_Columns, RuleItems p_RuleItems)
         {
-            var cmd = SqlCommand(p_Connection, _SplNameForData, _SplParamNameForKey, p_SplParamInput);
-            object[] cellValues = new object[p_Columns.Count];
-            using (var reader = cmd.ExecuteReader())
+            var cmd = CreateSqlCommand(p_Connection, _SplNameForData, _SplParamNameForKey, p_SplParamInput);
+            cmd.ExecuteReaderWithAction(reader =>
             {
-                while (reader.Read())
+                var i = 0;
+                object[] cellValues = new object[p_Columns.Count];
+                foreach (var col in p_Columns)
                 {
-                    var i = 0;
-                    foreach (var col in p_Columns)
-                    {
-                        cellValues[i] = new CellFactory(_Container).CreateCell(reader.GetString(col.Index), col.InputOutput);
-                        i++;
-                    }
-                    p_RuleItems.AddRuleItem(cellValues);
+                    cellValues[i++] = new CellFactory(_Container).CreateCell(reader.GetString(col.Index), col.InputOutput);
                 }
-            }
+                p_RuleItems.AddRuleItem(cellValues);
+            });
         }
 
-        private static SqlCommand SqlCommand(SqlConnection p_ConnectionString, string p_SplName, string p_SplParamName, string p_SplParamValue)
+        private static SqlCommand CreateSqlCommand(SqlConnection p_ConnectionString, string p_SplName, string p_SplParamName, string p_SplParamValue)
         {
             var cmd = p_ConnectionString.CreateCommand();
             cmd.CommandText = p_SplName;
