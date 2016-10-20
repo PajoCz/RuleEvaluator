@@ -67,10 +67,19 @@ namespace RuleEvaluator.Test
             items.AddRuleItem(".*", ".*", ".*", "MyString", "INTERVAL<15;24)", new CellFactory(_WindsorContainer).CreateCell("C2/240", CellInputOutputType.Output));
             var filterValue = items.Find("Anything", "Anything2", "Anything3", "MyString", 15m).Output(0).FilterValue;
 
-            var expr = new Expression(filterValue.ToString());
-            expr.Parameters["C2"] = 480;
+            var expr = new Expression(filterValue.ToString())
+            {
+                Parameters =
+                {
+                    ["C1"] = null,
+                    ["C2"] = 36000,
+                    ["C3"] = null,
+                    ["C4"] = null,
+                    ["C5"] = null
+                }
+            };
             var actual = expr.Evaluate();
-            Assert.AreEqual(2, actual);
+            Assert.AreEqual(150, actual);
         }
 
         //[Test]
