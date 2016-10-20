@@ -58,5 +58,13 @@ namespace RuleEvaluator.Test
             var ri = new RuleItem(_WindsorContainer, cellInput1, new CellFactory(_WindsorContainer).CreateCell("vystup", CellInputOutputType.Output), cellInput2);
             Assert.IsTrue(ri.ValidateInput(cellInput1, cellInput2));
         }
+
+        [Test]
+        public void ValidateInput_ExpectedOneParameterAndValidatedWithoutAnyParametr_ThrowsException()
+        {
+            string cellInput1 = "input1";
+            var ri = new RuleItem(_WindsorContainer, cellInput1);
+            Assert.Throws<ArgumentOutOfRangeException>(() => ri.ValidateInput());
+        }
     }
 }

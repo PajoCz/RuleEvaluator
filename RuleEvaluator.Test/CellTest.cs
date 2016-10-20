@@ -1,4 +1,6 @@
-﻿using Castle.Windsor;
+﻿using System;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor;
 using Castle.Windsor.Installer;
 using NUnit.Framework;
 
@@ -71,6 +73,35 @@ namespace RuleEvaluator.Test
             int input = 10;
             var cell = new CellFactory(_WindsorContainer).CreateCell(input);
             Assert.IsFalse(cell.Validate(++input));
+        }
+
+        [Test]
+        public void Validate_FilterValueIsNull_ThrowsException()
+        {
+            var cell = new CellFactory(_WindsorContainer).CreateCell(null);
+            Assert.Throws<ArgumentNullException>(() => cell.Validate(10));
+        }
+
+        [Test]
+        public void Validate_AllCellsValidateModuleInChainOfResponsibilityReturnsNull_ThrowsException()
+        {
+            IWindsorContainer container = new WindsorContainer();
+            container.Register(Component.For<ICell>().ImplementedBy<Cell>().LifestyleTransient());
+            container.Register(Component.For<ICellValidateModule>().ImplementedBy<CellValidateModuleUnknown>().LifestyleSingleton());
+
+            int input = 10;
+            var cell = new CellFactory(container).CreateCell(input);
+            var exc = Assert.Throws<Exception>(() => cell.Validate(input));
+            Assert.AreEqual("Uknown validate result from ICellValidateModule instances", exc.Message);
+            //Assert.That(() => cell.Validate(input), Throws.TypeOf<Exception>().With.Message.EqualTo("Uknown validate result from ICellValidateModule instances"));
+        }
+
+        private class CellValidateModuleUnknown : ICellValidateModule
+        {
+            public bool? Validate(object p_CellFilter, object p_ValueDataForValidating)
+            {
+                return null;
+            }
         }
 
         /// <summary>

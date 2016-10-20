@@ -50,8 +50,7 @@ namespace RuleEvaluator
 
         public bool ValidateInput(params object[] p_Data)
         {
-            if (p_Data == null) throw new ArgumentNullException(nameof(p_Data));
-            if (p_Data.Length != CellsOnlyInput.Count) throw new ArgumentOutOfRangeException(nameof(p_Data));
+            if (p_Data?.Length != CellsOnlyInput.Count) throw new ArgumentOutOfRangeException(nameof(p_Data));
 
             for (var i = 0; i < CellsOnlyInput.Count; i++)
             {

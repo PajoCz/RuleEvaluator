@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 
 namespace RuleEvaluator.Test
 {
@@ -29,6 +30,13 @@ namespace RuleEvaluator.Test
         {
             CellValidateModuleRegex validateModule = new CellValidateModuleRegex();
             return validateModule.Validate(p_CellFilter, p_ValueDataForValidating);
+        }
+
+        [TestCase(null, "AnyValue")]
+        public void Validate_NullCellFilter_ThrowsException(object p_CellFilter, object p_ValueDataForValidating)
+        {
+            CellValidateModuleRegex validateModule = new CellValidateModuleRegex();
+            Assert.Throws<ArgumentNullException>(() => validateModule.Validate(p_CellFilter, p_ValueDataForValidating));
         }
     }
 }
