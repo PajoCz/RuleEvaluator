@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using Castle.Windsor;
+using Dapper;
 
 namespace RuleEvaluator.Repository.Database
 {
@@ -12,15 +13,13 @@ namespace RuleEvaluator.Repository.Database
         private readonly string _ConnectionString;
         private readonly string _SplNameForColumns;
         private readonly string _SplNameForData;
-        private readonly string _SplParamNameForKey;
 
-        public RuleItemsRepository(IWindsorContainer p_Container, string p_ConnectionString, string p_SplNameForColumns, string p_SplNameForData, string p_SplParamNameForKey = "Key")
+        public RuleItemsRepository(IWindsorContainer p_Container, string p_ConnectionString, string p_SplNameForColumns, string p_SplNameForData)
         {
             _Container = p_Container;
             _ConnectionString = p_ConnectionString;
             _SplNameForColumns = p_SplNameForColumns;
             _SplNameForData = p_SplNameForData;
-            _SplParamNameForKey = p_SplParamNameForKey;
         }
 
         public RuleItems Load(string p_Key)
@@ -29,60 +28,31 @@ namespace RuleEvaluator.Repository.Database
             {
                 conn.Open();
 
-                List<ColumnSettings> cols = CreateColumnSettings(conn, p_Key);
+                List<ColumnSettings> columnSettings = conn.Query<ColumnSettings>(_SplNameForColumns, new {Key = p_Key}, commandType: CommandType.StoredProcedure).ToList();
+                List<IDictionary<string, object>> data = (conn.Query(_SplNameForData, new {Key = p_Key}, commandType: CommandType.StoredProcedure) as IEnumerable<IDictionary<string, object>>).ToList();
+
                 var result = new RuleItems(_Container);
-                FillRuleItems(conn, p_Key, cols, result);
+                for (var iRow = 0; iRow < data.Count; iRow++)
+                {
+                    object[] cellValues = new object[columnSettings.Count];
+                    List<object> rowData = data[iRow].Values.ToList();
+                    for (var iColumn = 0; iColumn < columnSettings.Count; iColumn++)
+                    {
+                        cellValues[iColumn] = new CellFactory(_Container).CreateCell(rowData[columnSettings[iColumn].Index], columnSettings[iColumn].InputOutput);
+                    }
+                    result.AddRuleItem(cellValues);
+                }
                 return result;
             }
         }
 
-        private List<ColumnSettings> CreateColumnSettings(SqlConnection p_Connection, string p_SplParamInput)
-        {
-            List<ColumnSettings> result = new List<ColumnSettings>();
-            var cmd = CreateSqlCommand(p_Connection, _SplNameForColumns, _SplParamNameForKey, p_SplParamInput);
-            cmd.ExecuteReaderWithAction(reader =>
-            {
-                var colIndex = reader.GetInt32(0);
-                var isOut = Convert.ToBoolean(reader.GetInt32(1));
-                result.Add(new ColumnSettings(colIndex, isOut ? CellInputOutputType.Output : CellInputOutputType.Input));
-            });
-            return result;
-        }
-
-        private void FillRuleItems(SqlConnection p_Connection, string p_SplParamInput, List<ColumnSettings> p_Columns, RuleItems p_RuleItems)
-        {
-            var cmd = CreateSqlCommand(p_Connection, _SplNameForData, _SplParamNameForKey, p_SplParamInput);
-            cmd.ExecuteReaderWithAction(reader =>
-            {
-                var i = 0;
-                object[] cellValues = new object[p_Columns.Count];
-                foreach (var col in p_Columns)
-                {
-                    cellValues[i++] = new CellFactory(_Container).CreateCell(reader.GetString(col.Index), col.InputOutput);
-                }
-                p_RuleItems.AddRuleItem(cellValues);
-            });
-        }
-
-        private static SqlCommand CreateSqlCommand(SqlConnection p_ConnectionString, string p_SplName, string p_SplParamName, string p_SplParamValue)
-        {
-            var cmd = p_ConnectionString.CreateCommand();
-            cmd.CommandText = p_SplName;
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue(p_SplParamName, p_SplParamValue);
-            return cmd;
-        }
-
         private class ColumnSettings
         {
-            public ColumnSettings(int p_Index, CellInputOutputType p_InputOutput)
-            {
-                Index = p_Index;
-                InputOutput = p_InputOutput;
-            }
-
-            public int Index { get; }
-            public CellInputOutputType InputOutput { get; }
+            /// <summary>
+            /// Index in data row, where is located FilterValue of cell
+            /// </summary>
+            public int Index { get; set; }
+            public CellInputOutputType InputOutput { get; set; }
         }
     }
 }

@@ -15,7 +15,7 @@ BEGIN
 
 	SET NOCOUNT ON
 	
-	SELECT tsc.ColKod - 1, CASE tsc.ColType WHEN 'In' THEN 0 WHEN 'Out' THEN 1 END AS [Out]
+	SELECT tsc.ColKod - 1 AS [Index], CASE tsc.ColType WHEN 'In' THEN 'Input' WHEN 'Out' THEN 'Output' END AS [InputOutput]
 	FROM Ciselnik.TranslatorSchema AS ts
 	JOIN Ciselnik.TranslatorSchemaCol AS tsc ON tsc.IdTranslatorSchema = ts.IdTranslatorSchema
 	WHERE Kod = @Key
