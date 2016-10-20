@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>RuleEvaluator.Repository.Database</id>
+    <version>1.0.0</version>
+    <authors>pbalas</authors>
+    <owners>pbalas</owners>
+    <licenseUrl>https://github.com/PajoCz/RuleEvaluator/blob/master/licence.txt</licenseUrl>
+    <projectUrl>https://github.com/PajoCz/RuleEvaluator</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>RuleEvaluator.Repository.Database</description>
+    <copyright>Copyright 2016 Pavel Balas</copyright>
+    <tags>Rule Evaluator Repository Database</tags>
+    <dependencies>
+      <group targetFramework="net45">
+        <dependency id="RuleEvaluator" version="1.0.0" />
+        <dependency id="Castle.Core" version="3.3.3" />
+        <dependency id="Castle.Windsor" version="3.3.0" />
+        <dependency id="Dapper" version="1.50.2" />
+      </group>
+    </dependencies>
+  </metadata>
+
+  <files>
+    <file src="RuleEvaluator.Repository.Database\bin\Release\RuleEvaluator.Repository.Database.dll" target="lib\net45"/>
+    <file src="RuleEvaluator.Repository.Database\bin\Release\RuleEvaluator.Repository.Database.pdb" target="lib\net45"/>
+  </files>
+</package>
