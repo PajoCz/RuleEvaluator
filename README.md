@@ -5,6 +5,9 @@
 |Item                  |Link                                                                                  |
 |:---------------------|:-------------------------------------------------------------------------------------|
 |Code coverage         | [![Coverage Status](https://coveralls.io/repos/github/PajoCz/RuleEvaluator/badge.svg?branch=master)](https://coveralls.io/github/PajoCz/RuleEvaluator?branch=master) |
+|NuGet                 |  [![NuGet version (RuleEvaluator)](https://img.shields.io/nuget/v/RuleEvaluator.svg?style=flat-square)](https://www.nuget.org/packages/RuleEvaluator/)
+|NuGet Repository      |  [![NuGet version (RuleEvaluator.Repository.Database)](https://img.shields.io/nuget/v/RuleEvaluator.Repository.Database.svg?style=flat-square)](https://www.nuget.org/packages/RuleEvaluator.Repository.Database/)
+
 
 For usage, see UnitTests. One sample is:
 
