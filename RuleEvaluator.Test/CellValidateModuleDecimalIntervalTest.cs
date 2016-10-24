@@ -42,11 +42,11 @@ namespace RuleEvaluator.Test
         /// TODO: Is integer correct input? Implement any conversion in Validate method and accept integer inputs?
         /// </summary>
         [Test]
-        public void Validate_ValueNotTypeOfDecimal_SetInteger_ThrowsException()
+        public void Validate_ValueNotTypeOfDecimal_SetInteger_IntervalConvertToDecimalAndAllIsOk()
         {
             var validator = new CellValidateModuleDecimalInterval();
-            var filter = new CellValidateFilterDecimalInterval();
-            Assert.Throws<ArgumentException>(() => validator.Validate(filter, 10));
+            var filter = new CellValidateFilterDecimalInterval(10, true, 20, true);
+            Assert.IsTrue(validator.Validate(filter, 10));
         }
 
         /// <summary>

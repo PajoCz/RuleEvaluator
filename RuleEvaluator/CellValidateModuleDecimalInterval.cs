@@ -37,6 +37,10 @@ namespace RuleEvaluator
 
             if (cellFilter == null) throw new ArgumentNullException(nameof(p_CellFilter));
             if (p_ValueDataForValidating == null) throw new ArgumentNullException(nameof(p_ValueDataForValidating));
+            if (p_ValueDataForValidating is int)
+            {
+                p_ValueDataForValidating = Convert.ToDecimal(p_ValueDataForValidating);
+            }
             if (!(p_ValueDataForValidating is decimal)) throw new ArgumentException($"{nameof(p_ValueDataForValidating)} is not of expected type {typeof(decimal)}");
 
             var filter = (CellValidateFilterDecimalInterval)cellFilter;
