@@ -9,14 +9,14 @@ namespace RuleEvaluator.Repository.Database
 {
     public class RuleItemsRepository
     {
-        private readonly IWindsorContainer _Container;
+        private readonly ICellFactory _CellFactory;
         private readonly string _ConnectionString;
         private readonly string _SplNameForColumns;
         private readonly string _SplNameForData;
 
-        public RuleItemsRepository(IWindsorContainer p_Container, string p_ConnectionString, string p_SplNameForColumns, string p_SplNameForData)
+        public RuleItemsRepository(ICellFactory p_CellFactory, string p_ConnectionString, string p_SplNameForColumns, string p_SplNameForData)
         {
-            _Container = p_Container;
+            _CellFactory = p_CellFactory;
             _ConnectionString = p_ConnectionString;
             _SplNameForColumns = p_SplNameForColumns;
             _SplNameForData = p_SplNameForData;
@@ -28,17 +28,17 @@ namespace RuleEvaluator.Repository.Database
             {
                 conn.Open();
 
-                List<ColumnSettings> columnSettings = conn.Query<ColumnSettings>(_SplNameForColumns, new {Key = p_Key}, commandType: CommandType.StoredProcedure).ToList();
-                List<IDictionary<string, object>> data = (conn.Query(_SplNameForData, new {Key = p_Key}, commandType: CommandType.StoredProcedure) as IEnumerable<IDictionary<string, object>>).ToList();
+                List<ColumnSettings> columnSettings = conn.Query<ColumnSettings>(_SplNameForColumns, new { Key = p_Key }, commandType: CommandType.StoredProcedure).ToList();
+                List<IDictionary<string, object>> data = (conn.Query(_SplNameForData, new { Key = p_Key }, commandType: CommandType.StoredProcedure) as IEnumerable<IDictionary<string, object>>).ToList();
 
-                var result = new RuleItems(_Container);
+                var result = new RuleItems(_CellFactory);
                 for (var iRow = 0; iRow < data.Count; iRow++)
                 {
                     object[] cellValues = new object[columnSettings.Count];
                     List<object> rowData = data[iRow].Values.ToList();
                     for (var iColumn = 0; iColumn < columnSettings.Count; iColumn++)
                     {
-                        cellValues[iColumn] = new CellFactory(_Container).CreateCell(rowData[columnSettings[iColumn].Index], columnSettings[iColumn].InputOutput);
+                        cellValues[iColumn] = _CellFactory.CreateCell(rowData[columnSettings[iColumn].Index], columnSettings[iColumn].InputOutput);
                     }
                     result.AddRuleItem(cellValues);
                 }

@@ -1,22 +1,21 @@
 using System.Collections.Generic;
-using Castle.Windsor;
 
 namespace RuleEvaluator
 {
     public class RuleItems
     {
-        private readonly IWindsorContainer _Container;
+        private readonly ICellFactory _CellFactory;
         private readonly List<RuleItem> Data;
 
-        public RuleItems(IWindsorContainer p_Container)
+        public RuleItems(ICellFactory p_CellFactory)
         {
-            _Container = p_Container;
+            _CellFactory = p_CellFactory;
             Data = new List<RuleItem>();
         }
 
         public void AddRuleItem(params object[] p_Cells)
         {
-            Data.Add(new RuleItem(_Container, p_Cells));
+            Data.Add(new RuleItem(_CellFactory, p_Cells));
         }
 
         public List<RuleItem> FindAll(params object[] p_FindParams)

@@ -44,11 +44,11 @@
   <ItemGroup>
     <Compile Include="Cell.cs" />
     <Compile Include="CellInputOutputType.cs" />
-    <Compile Include="CellFactory.cs" />
     <Compile Include="CellValidateModuleDecimalInterval.cs" />
     <Compile Include="CellValidateFilterDecimalInterval.cs" />
     <Compile Include="CellValidateModuleRegex.cs" />
     <Compile Include="ICell.cs" />
+    <Compile Include="ICellFactory.cs" />
     <Compile Include="ICellValidateModule.cs" />
     <Compile Include="RuleItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

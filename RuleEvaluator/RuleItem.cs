@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Castle.Windsor;
 
 namespace RuleEvaluator
 {
@@ -15,12 +14,12 @@ namespace RuleEvaluator
 
         private List<ICell> _CellsOnlyOutputCached;
 
-        public RuleItem(IWindsorContainer p_Container, params object[] p_Cells)
+        public RuleItem(ICellFactory p_Factory, params object[] p_Cells)
         {
             Cells = new List<ICell>(p_Cells.Length);
             foreach (var cell in p_Cells)
             {
-                Cells.Add(cell is ICell ? cell as ICell : new CellFactory(p_Container).CreateCell(cell));
+                Cells.Add(cell is ICell ? cell as ICell : p_Factory.CreateCell(cell));
             }
         }
 

@@ -17,9 +17,11 @@ namespace RuleEvaluator
         /// </summary>
         public CellInputOutputType InputOutputType { get; set; }
 
-        public Cell(ICellValidateModule p_CellValidateModule)
+        public Cell(ICellValidateModule p_CellValidateModule, object p_FilterValue, CellInputOutputType p_CellInputOutputTypeType = CellInputOutputType.Input)
         {
             _CellValidateModule = p_CellValidateModule;
+            FilterValue = p_FilterValue;
+            InputOutputType = p_CellInputOutputTypeType;
         }
 
         public bool Validate(object p_Value)

@@ -1,4 +1,5 @@
-﻿using Castle.MicroKernel.Registration;
+﻿using Castle.Facilities.TypedFactory;
+using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 
@@ -8,6 +9,9 @@ namespace RuleEvaluator
     {
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
+            container.AddFacility<TypedFactoryFacility>();
+            container.Register(Component.For<ICellFactory>().AsFactory());
+
             container.Register(Component.For<ICell>().ImplementedBy<Cell>().LifestyleTransient());
 
             //Modules in Chain of responsibility design pattern. 

@@ -19,7 +19,7 @@ BEGIN
 	FROM Ciselnik.TranslatorSchema AS ts
 	JOIN Ciselnik.TranslatorSchemaCol AS tsc ON tsc.IdTranslatorSchema = ts.IdTranslatorSchema
 	WHERE Kod = @Key
-	ORDER BY PoradiParamMetod
+	ORDER BY Poradi
 
 END
 

@@ -22,7 +22,8 @@ namespace RuleEvaluator.Repository.Database.Zfp.Test
         {
             get
             {
-                var repo = new RuleItemsRepository(_WindsorContainer, ConfigurationManager.AppSettings.Get("ConnectionString"), "Ciselnik.p_GetSchemaColBySchemaKod",
+                var cf = _WindsorContainer.Resolve<ICellFactory>();
+                var repo = new RuleItemsRepository(cf, ConfigurationManager.AppSettings.Get("ConnectionString"), "Ciselnik.p_GetSchemaColBySchemaKod",
                     "Ciselnik.p_GetTranslatorDataBySchemaKod");
                 return repo;
             }
