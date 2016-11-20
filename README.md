@@ -24,9 +24,10 @@ For usage, see UnitTests. One sample is:
         [Test]
         public void IntegrityTest_Find_OneFromMoreRuleItems_IntervalStringAsCellValidateFilterDecimal_ReturnsCorrectOutputValue()
         {
-            RuleItems items = new RuleItems(_WindsorContainer);
-            items.AddRuleItem(".*", ".*", ".*", "MyString", "Interval<10;15)", new CellFactory(_WindsorContainer).CreateCell("ReturnValue1", CellInputOutputType.Output));
-            items.AddRuleItem(".*", ".*", ".*", "MyString", "INTERVAL<15;24)", new CellFactory(_WindsorContainer).CreateCell("ReturnValue2", CellInputOutputType.Output));
+            var cf = _WindsorContainer.Resolve<ICellFactory>();
+            RuleItems items = new RuleItems(cf);
+            items.AddRuleItem(".*", ".*", ".*", "MyString", "Interval<10;15)", cf.CreateCell("ReturnValue1", CellInputOutputType.Output));
+            items.AddRuleItem(".*", ".*", ".*", "MyString", "INTERVAL<15;24)", cf.CreateCell("ReturnValue2", CellInputOutputType.Output));
             Assert.AreEqual("ReturnValue2", items.Find("Anything", "Anything2", "Anything3", "MyString", 15m).Output(0).FilterValue);
         }
 
@@ -35,7 +36,7 @@ RuleEvaluator.Repository.Database can load RuleItems from DB. One unit test samp
         [Test]
         public void IntegrateTest_RepoLoad_FindOneRuleItemAndCheckFilterValue()
         {
-            var repo = new RuleItemsRepository(_WindsorContainer, ConfigurationManager.AppSettings.Get("ConnectionString"), "Ciselnik.p_GetSchemaColBySchemaKod", "Ciselnik.p_GetTranslatorDataBySchemaKod");
+            var repo = new RuleItemsRepository(_WindsorContainer.Resolve<ICellFactory>(), ConfigurationManager.AppSettings.Get("ConnectionString"), "Ciselnik.p_GetSchemaColBySchemaKod", "Ciselnik.p_GetTranslatorDataBySchemaKod");
             var items = repo.Load("OdhadBodu");
             var found = items.Find("A", "B", "C", "7BN Perspektiva Důchod", 15);
             var outputValue = found.Output(0).FilterValue;
