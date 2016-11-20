@@ -31,16 +31,21 @@ namespace RuleEvaluator.Test
         }
 
         [Test]
-        public void Validate_ValueNotTypeOfDecimal_ThrowsException()
+        public void Validate_ValueNotTypeOfDecimal_SetString_ThrowsException()
         {
             var validator = new CellValidateModuleDecimalInterval();
             var filter = new CellValidateFilterDecimalInterval();
-            Assert.Throws<ArgumentException>(() => validator.Validate(filter, "text"));
+            Assert.Throws<FormatException>(() => validator.Validate(filter, "text"));
         }
 
-        /// <summary>
-        /// TODO: Is integer correct input? Implement any conversion in Validate method and accept integer inputs?
-        /// </summary>
+        [Test]
+        public void Validate_ValueNotTypeOfDecimal_SetString_INtervalConvertToDecimalAndAllIsOk()
+        {
+            var validator = new CellValidateModuleDecimalInterval();
+            var filter = new CellValidateFilterDecimalInterval(10, true, 20, true);
+            Assert.IsTrue(validator.Validate(filter, "10"));
+        }
+
         [Test]
         public void Validate_ValueNotTypeOfDecimal_SetInteger_IntervalConvertToDecimalAndAllIsOk()
         {
@@ -49,15 +54,20 @@ namespace RuleEvaluator.Test
             Assert.IsTrue(validator.Validate(filter, 10));
         }
 
-        /// <summary>
-        /// TODO: Is integer correct input? Implement any conversion in Validate method and accept integer inputs?
-        /// </summary>
         [Test]
-        public void Validate_ValueNotTypeOfDecimal_SetDouble_ThrowsException()
+        public void Validate_ValueNotTypeOfDecimal_SetDouble_IntervalConvertToDecimalAndAllIsOk()
         {
             var validator = new CellValidateModuleDecimalInterval();
-            var filter = new CellValidateFilterDecimalInterval();
-            Assert.Throws<ArgumentException>(() => validator.Validate(filter, 10d));
+            var filter = new CellValidateFilterDecimalInterval(10, true, 20, true);
+            Assert.IsTrue(validator.Validate(filter, 10d));
+        }
+
+        [Test]
+        public void Validate_ValueNotTypeOfDecimal_SetFloat_IntervalConvertToDecimalAndAllIsOk()
+        {
+            var validator = new CellValidateModuleDecimalInterval();
+            var filter = new CellValidateFilterDecimalInterval(10, true, 20, true);
+            Assert.IsTrue(validator.Validate(filter, 10f));
         }
     }
 }
