@@ -7,7 +7,7 @@ namespace RuleEvaluator.Test
     public class CellValidateModuleDecimalIntervalTest
     {
         [Test]
-        public void Validate_CorrectTypes_NotThrownException()
+        public void Validate_CorrectTypes_NotThrowsException()
         {
             var validator = new CellValidateModuleDecimalInterval();
             var filter = new CellValidateFilterDecimalInterval();

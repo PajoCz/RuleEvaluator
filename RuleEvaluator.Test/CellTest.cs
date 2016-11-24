@@ -24,56 +24,98 @@ namespace RuleEvaluator.Test
         [Test]
         public void Ctor_SetFilterValueInCtor_FilterValueIsSet1()
         {
+            //Arrange
             string input = "Text";
-            var cell = _WindsorContainer.Resolve<ICellFactory>().CreateCell(input);
+            var cf = _WindsorContainer.Resolve<ICellFactory>();
+
+            //Act
+            var cell = cf.CreateCell(input);
+
+            //Assert
             Assert.AreEqual(input, cell.FilterValue);
         }
 
         [Test]
         public void Ctor_SetFilterValueWithoutInputOutputType_ReturnsCellWithInputType()
         {
+            //Arrange
             string input = "Text";
-            var cell = _WindsorContainer.Resolve<ICellFactory>().CreateCell(input);
+            var cf = _WindsorContainer.Resolve<ICellFactory>();
+
+            //Act
+            var cell = cf.CreateCell(input);
+
+            //Assert
             Assert.AreEqual(CellInputOutputType.Input, cell.InputOutputType);
         }
 
         [Test]
         public void Ctor_SetFilterValueAndOutputType_ReturnsCellWithOutputType()
         {
+            //Arrange
             string input = "Text";
-            var cell = _WindsorContainer.Resolve<ICellFactory>().CreateCell(input, CellInputOutputType.Output);
+            var cf = _WindsorContainer.Resolve<ICellFactory>();
+
+            //Act
+            var cell = cf.CreateCell(input, CellInputOutputType.Output);
+
+            //Assert
             Assert.AreEqual(CellInputOutputType.Output, cell.InputOutputType);
         }
 
         [Test]
         public void Validate_StringOriginal_ReturnTrue()
         {
+            //Arrange
             string input = "Text";
-            var cell = _WindsorContainer.Resolve<ICellFactory>().CreateCell(input);
+            var cf = _WindsorContainer.Resolve<ICellFactory>();
+
+            //Act
+            var cell = cf.CreateCell(input);
+
+            //Assert
             Assert.IsTrue(cell.Validate(input));
         }
 
         [Test]
         public void Validate_StringChanged_ReturnFalse()
         {
+            //Arrange
             string input = "Text";
-            var cell = _WindsorContainer.Resolve<ICellFactory>().CreateCell(input);
+            var cf = _WindsorContainer.Resolve<ICellFactory>();
+
+            //Act
+            var cell = cf.CreateCell(input);
+
+            //Assert
             Assert.IsFalse(cell.Validate(input + "Changed"));
         }
 
         [Test]
         public void Validate_IntOriginal_ReturnTrue()
         {
+            //Arrange
             int input = 10;
-            var cell = _WindsorContainer.Resolve<ICellFactory>().CreateCell(input);
+            var cf = _WindsorContainer.Resolve<ICellFactory>();
+
+            //Act
+            var cell = cf.CreateCell(input);
+
+            //Assert
             Assert.IsTrue(cell.Validate(input));
         }
 
         [Test]
         public void Validate_IntIncremented_ReturnFalse()
         {
+            //Arrange
             int input = 10;
-            var cell = _WindsorContainer.Resolve<ICellFactory>().CreateCell(input);
+            var cf = _WindsorContainer.Resolve<ICellFactory>();
+
+            //Act
+            var cell = cf.CreateCell(input);
+
+            //Assert
             Assert.IsFalse(cell.Validate(++input));
         }
 
@@ -87,14 +129,17 @@ namespace RuleEvaluator.Test
         [Test]
         public void Validate_AllCellsValidateModuleInChainOfResponsibilityReturnsNull_ThrowsException()
         {
+            //Arrange
+            int input = 10;
             IWindsorContainer container = new WindsorContainer();
             container.AddFacility<TypedFactoryFacility>();
             container.Register(Component.For<ICellFactory>().AsFactory());
             container.Register(Component.For<ICell>().ImplementedBy<Cell>().LifestyleTransient());
             container.Register(Component.For<ICellValidateModule>().ImplementedBy<CellValidateModuleUnknown>().LifestyleSingleton());
+            var cf = container.Resolve<ICellFactory>();
 
-            int input = 10;
-            var cell = container.Resolve<ICellFactory>().CreateCell(input);
+            //Act with Assert
+            var cell = cf.CreateCell(input);
             var exc = Assert.Throws<Exception>(() => cell.Validate(input));
             Assert.AreEqual("Uknown validate result from ICellValidateModule instances", exc.Message);
             //Assert.That(() => cell.Validate(input), Throws.TypeOf<Exception>().With.Message.EqualTo("Uknown validate result from ICellValidateModule instances"));
@@ -116,8 +161,14 @@ namespace RuleEvaluator.Test
         [Test]
         public void ContainerWithoutTracking_MeansTransientLifestyle()
         {
+            //Arrange
             int input = 10;
-            var cell = _WindsorContainer.Resolve<ICellFactory>().CreateCell(input);
+            var cf = _WindsorContainer.Resolve<ICellFactory>();
+
+            //Act
+            var cell = cf.CreateCell(input);
+
+            //Assert
             Assert.IsFalse(_WindsorContainer.Kernel.ReleasePolicy.HasTrack(cell));
         }
 
