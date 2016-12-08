@@ -38,10 +38,72 @@ namespace RuleEvaluator.Test
             var cf = _WindsorContainer.Resolve<ICellFactory>();
 
             //Act
-            var ri = new RuleItem(cf, "text", cf.CreateCell("vystup", CellInputOutputType.Output));
+            var ri = new RuleItem(cf, "text", cf.CreateCell("output", CellInputOutputType.Output));
 
             //Assert
             Assert.AreEqual(CellInputOutputType.Output, ri.Cells[1].InputOutputType);
+        }
+
+        [Test]
+        public void ValidateInput_OneInputOneOutput_ReturnsTrue()
+        {
+            //Arrange
+            var cf = _WindsorContainer.Resolve<ICellFactory>();
+            string input = "input";
+            string output = "output";
+
+            //Act
+            var ri = new RuleItem(cf, input, cf.CreateCell(output, CellInputOutputType.Output));
+
+            //Assert
+            Assert.IsTrue(ri.ValidateInput(input));
+        }
+
+        [Test]
+        public void ValidateInput_OneInputOneOutput_ReturnsFalse()
+        {
+            //Arrange
+            var cf = _WindsorContainer.Resolve<ICellFactory>();
+            string input = "text";
+            string output = "output";
+
+            //Act
+            var ri = new RuleItem(cf, input, cf.CreateCell(output, CellInputOutputType.Output));
+
+            //Assert
+            Assert.IsFalse(ri.ValidateInput(input + "changed"));
+        }
+
+        [Test]
+        public void ValidateInput_TwoInputsOneOutput_ReturnsTrue()
+        {
+            //Arrange
+            var cf = _WindsorContainer.Resolve<ICellFactory>();
+            string input1 = "text1";
+            string input2 = "text2";
+            string output = "output";
+
+            //Act
+            var ri = new RuleItem(cf, input1, input2, cf.CreateCell(output, CellInputOutputType.Output));
+
+            //Assert
+            Assert.IsTrue(ri.ValidateInput(input1, input2));
+        }
+
+        [Test]
+        public void ValidateInput_TwoInputsOneOutput_OneInputIsCorrectAndOtherIncorrect_ValidateByAndOperatorReturnsFalse()
+        {
+            //Arrange
+            var cf = _WindsorContainer.Resolve<ICellFactory>();
+            string input1 = "text1";
+            string input2 = "text2";
+            string output = "output";
+
+            //Act
+            var ri = new RuleItem(cf, input1, input2, cf.CreateCell(output, CellInputOutputType.Output));
+
+            //Assert
+            Assert.IsFalse(ri.ValidateInput(input1, input2 + "changed"));
         }
 
         [Test]
@@ -77,7 +139,7 @@ namespace RuleEvaluator.Test
             string cellInput1 = "input1";
             int cellInput2 = 1;
             var cf = _WindsorContainer.Resolve<ICellFactory>();
-            var ri = new RuleItem(cf, cellInput1, cf.CreateCell("vystup", CellInputOutputType.Output), cellInput2);
+            var ri = new RuleItem(cf, cellInput1, cf.CreateCell("output", CellInputOutputType.Output), cellInput2);
 
             //Act
             var validated = ri.ValidateInput(cellInput1, cellInput2);

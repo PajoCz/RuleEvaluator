@@ -42,7 +42,7 @@ namespace RuleEvaluator.Test
             RuleItems items = new RuleItems(cf);
             items.AddRuleItem(".*", ".*", ".*", "MyString", cf.CreateCell(new CellValidateFilterDecimalInterval(10, true, 15, false)),
                 cf.CreateCell("ReturnValue1", CellInputOutputType.Output));
-            items.AddRuleItem(".*", ".*", ".*", "MyString", cf.CreateCell(new CellValidateFilterDecimalInterval(15, true, 24, false)),
+            items.AddRuleItem(".*", ".*", ".*", "MyString", cf.CreateCell(new CellValidateFilterDecimalInterval(15, true, 24, true)),
                 cf.CreateCell("ReturnValue2", CellInputOutputType.Output));
 
             //Act
@@ -59,7 +59,7 @@ namespace RuleEvaluator.Test
             var cf = _WindsorContainer.Resolve<ICellFactory>();
             RuleItems items = new RuleItems(cf);
             items.AddRuleItem(".*", ".*", ".*", "MyString", "Interval<10;15)", cf.CreateCell("ReturnValue1", CellInputOutputType.Output));
-            items.AddRuleItem(".*", ".*", ".*", "MyString", "INTERVAL<15;24)", cf.CreateCell("ReturnValue2", CellInputOutputType.Output));
+            items.AddRuleItem(".*", ".*", ".*", "MyString", "INTERVAL<15;24>", cf.CreateCell("ReturnValue2", CellInputOutputType.Output));
 
             //Act
             var found = items.Find("Anything", "Anything2", "Anything3", "MyString", 15m).Output(0).FilterValue;
@@ -75,7 +75,7 @@ namespace RuleEvaluator.Test
             var cf = _WindsorContainer.Resolve<ICellFactory>();
             RuleItems items = new RuleItems(cf);
             items.AddRuleItem(".*", ".*", ".*", "MyString", "Interval<10;15>", cf.CreateCell("ReturnValue1", CellInputOutputType.Output));
-            items.AddRuleItem(".*", ".*", ".*", "MyString", "INTERVAL<15;24)", cf.CreateCell("ReturnValue2", CellInputOutputType.Output));
+            items.AddRuleItem(".*", ".*", ".*", "MyString", "INTERVAL<15;24>", cf.CreateCell("ReturnValue2", CellInputOutputType.Output));
             items.AddRuleItem(".*", ".*", ".*", "MyString", "INTERVAL(50;100)", cf.CreateCell("ReturnValue3", CellInputOutputType.Output));
 
             //Act
@@ -92,7 +92,7 @@ namespace RuleEvaluator.Test
             var cf = _WindsorContainer.Resolve<ICellFactory>();
             RuleItems items = new RuleItems(cf);
             items.AddRuleItem(".*", ".*", ".*", "MyString", "Interval<10;15)", cf.CreateCell("C2/400", CellInputOutputType.Output));
-            items.AddRuleItem(".*", ".*", ".*", "MyString", "INTERVAL<15;24)", cf.CreateCell("C2/240", CellInputOutputType.Output));
+            items.AddRuleItem(".*", ".*", ".*", "MyString", "INTERVAL<15;24>", cf.CreateCell("C2/240", CellInputOutputType.Output));
 
             //Act - Find
             var filterValue = items.Find("Anything", "Anything2", "Anything3", "MyString", 15m).Output(0).FilterValue;
