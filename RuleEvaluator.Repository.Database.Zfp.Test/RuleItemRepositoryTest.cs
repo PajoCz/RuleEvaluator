@@ -35,7 +35,7 @@ namespace RuleEvaluator.Repository.Database.Zfp.Test
             var items = RuleItemsRepository.Load("OdhadBodu");
             var found = items.Find("ZFP akademie, a.s.", "", "", "ZFP Život + Unisex 2016", 27);
             var outputValue = found.Output(0).FilterValue;
-            Assert.AreEqual("C2/200", outputValue);
+            Assert.AreEqual("C2/200*0.7", outputValue);
         }
 
         [Test]

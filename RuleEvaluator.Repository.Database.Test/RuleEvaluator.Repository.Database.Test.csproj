@@ -50,6 +50,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="RuleItemRepositoryTest.cs" />
@@ -68,6 +70,16 @@
       <Project>{c1228381-1f09-4c8b-a0c9-f30f11d64a59}</Project>
       <Name>RuleEvaluator</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CreateDatabase.sql" />
+    <Content Include="RuleEvaluatorTest.mdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="RuleEvaluatorTest_log.ldf">
+      <DependentUpon>RuleEvaluatorTest.mdf</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

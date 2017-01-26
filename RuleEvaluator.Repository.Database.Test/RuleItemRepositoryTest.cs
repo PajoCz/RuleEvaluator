@@ -31,7 +31,7 @@ namespace RuleEvaluator.Repository.Database.Test
             var outputValue = found.Output(0).FilterValue;
 
             //Assert
-            Assert.AreEqual("C2/240", outputValue);
+            Assert.AreEqual("C2/240*0.7", outputValue);
         }
     }
 }
