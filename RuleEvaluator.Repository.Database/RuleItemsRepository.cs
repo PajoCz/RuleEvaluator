@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using Castle.Windsor;
 using Dapper;
 
 namespace RuleEvaluator.Repository.Database
@@ -10,19 +10,26 @@ namespace RuleEvaluator.Repository.Database
     public class RuleItemsRepository
     {
         private readonly ICellFactory _CellFactory;
+        private readonly ICacheWrapper _CacheWrapper;
         private readonly string _ConnectionString;
         private readonly string _SplNameForColumns;
         private readonly string _SplNameForData;
 
-        public RuleItemsRepository(ICellFactory p_CellFactory, string p_ConnectionString, string p_SplNameForColumns, string p_SplNameForData)
+        public RuleItemsRepository(ICellFactory p_CellFactory, ICacheWrapper p_CacheWrapper, string p_ConnectionString, string p_SplNameForColumns, string p_SplNameForData)
         {
             _CellFactory = p_CellFactory;
+            _CacheWrapper = p_CacheWrapper;
             _ConnectionString = p_ConnectionString;
             _SplNameForColumns = p_SplNameForColumns;
             _SplNameForData = p_SplNameForData;
         }
 
         public RuleItems Load(string p_Key)
+        {
+            return (RuleItems)_CacheWrapper.GetItem(() => LoadImpl(p_Key), TimeSpan.FromMinutes(10));
+        }
+
+        public RuleItems LoadImpl(string p_Key)
         {
             using (var conn = new SqlConnection(_ConnectionString))
             {

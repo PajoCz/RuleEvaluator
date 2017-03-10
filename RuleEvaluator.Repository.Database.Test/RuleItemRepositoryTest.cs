@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
 using NUnit.Framework;
@@ -14,6 +15,7 @@ namespace RuleEvaluator.Repository.Database.Test
             {
                 IWindsorContainer container = new WindsorContainer();
                 container.Install(FromAssembly.InThisApplication());
+                container.Register(Component.For<ICacheWrapper>().ImplementedBy<CacheWrapperEmpty>().LifestyleTransient());
                 return container;
             }
         }
@@ -23,9 +25,10 @@ namespace RuleEvaluator.Repository.Database.Test
         {
             //Arrange
             var cf = _WindsorContainer.Resolve<ICellFactory>();
+            var cache = _WindsorContainer.Resolve<ICacheWrapper>();
 
             //Act
-            var repo = new RuleItemsRepository(cf, ConfigurationManager.AppSettings.Get("ConnectionString"), "Ciselnik.p_GetSchemaColBySchemaKod", "Ciselnik.p_GetTranslatorDataBySchemaKod");
+            var repo = new RuleItemsRepository(cf, cache, ConfigurationManager.AppSettings.Get("ConnectionString"), "Ciselnik.p_GetSchemaColBySchemaKod", "Ciselnik.p_GetTranslatorDataBySchemaKod");
             var items = repo.Load("OdhadBodu");
             var found = items.Find("A", "B", "C", "7BN Perspektiva Důchod", 15);
             var outputValue = found.Output(0).FilterValue;

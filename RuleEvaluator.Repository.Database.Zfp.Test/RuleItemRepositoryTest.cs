@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using System.Configuration;
+using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
 
@@ -14,6 +15,7 @@ namespace RuleEvaluator.Repository.Database.Zfp.Test
             {
                 IWindsorContainer container = new WindsorContainer();
                 container.Install(FromAssembly.InThisApplication());
+                container.Register(Component.For<ICacheWrapper>().ImplementedBy<CacheWrapperEmpty>().LifestyleTransient());
                 return container;
             }
         }
@@ -23,7 +25,8 @@ namespace RuleEvaluator.Repository.Database.Zfp.Test
             get
             {
                 var cf = _WindsorContainer.Resolve<ICellFactory>();
-                var repo = new RuleItemsRepository(cf, ConfigurationManager.AppSettings.Get("ConnectionString"), "Ciselnik.p_GetSchemaColBySchemaKod",
+                var cache = _WindsorContainer.Resolve<ICacheWrapper>();
+                var repo = new RuleItemsRepository(cf, cache, ConfigurationManager.AppSettings.Get("ConnectionString"), "Ciselnik.p_GetSchemaColBySchemaKod",
                     "Ciselnik.p_GetTranslatorDataBySchemaKod");
                 return repo;
             }
