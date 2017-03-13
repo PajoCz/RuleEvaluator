@@ -26,7 +26,12 @@ namespace RuleEvaluator.Repository.Database
 
         public RuleItems Load(string p_Key)
         {
-            return (RuleItems)_CacheWrapper.GetItem(() => LoadImpl(p_Key), TimeSpan.FromMinutes(10));
+            return Load(p_Key, TimeSpan.FromMinutes(10));
+        }
+
+        public RuleItems Load(string p_Key, TimeSpan p_CacheRelativeExpiration)
+        {
+            return (RuleItems)_CacheWrapper.GetItem(() => LoadImpl(p_Key), p_CacheRelativeExpiration);
         }
 
         public RuleItems LoadImpl(string p_Key)

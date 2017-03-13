@@ -13,6 +13,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuleEvaluator.Repository.Da
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuleEvaluator.Repository.Database.Zfp.Test", "RuleEvaluator.Repository.Database.Zfp.Test\RuleEvaluator.Repository.Database.Zfp.Test.csproj", "{99031304-9257-48ED-8457-E16A72F263C6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AAA0A978-DAC9-4CA2-95D8-8A8DDFFB3B98}"
+	ProjectSection(SolutionItems) = preProject
+		nuget-pack-RuleEvaluator.nuspec.bat = nuget-pack-RuleEvaluator.nuspec.bat
+		nuget-pack-RuleEvaluator.Repository.Database.nuspec.bat = nuget-pack-RuleEvaluator.Repository.Database.nuspec.bat
+		RuleEvaluator.nuspec = RuleEvaluator.nuspec
+		RuleEvaluator.Repository.Database.nuspec = RuleEvaluator.Repository.Database.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
