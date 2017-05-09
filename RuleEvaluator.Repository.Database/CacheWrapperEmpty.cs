@@ -14,5 +14,9 @@ namespace RuleEvaluator.Repository.Database
         {
             return p_NotFoundInCacheItemRetrievalCallback();
         }
+
+        public void ClearAll()
+        {            
+        }
     }
 }

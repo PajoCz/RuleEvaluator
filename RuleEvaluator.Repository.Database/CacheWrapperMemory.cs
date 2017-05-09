@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -40,6 +41,23 @@ namespace RuleEvaluator.Repository.Database
             }
 
             return item;
+        }
+
+        public void ClearAll()
+        {
+            //After call Dispose is internal state IsDisposed=1 and nothing is caching
+            //MemoryCache.Default.Dispose();
+
+            //bad performance
+            //http://blog.aggregatedintelligence.com/2011/01/listing-contents-of-memorycache.html
+            //http://stackoverflow.com/questions/4183270/how-to-clear-the-net-4-memorycache
+            MemoryCache memoryCache = MemoryCache.Default;
+            IDictionaryEnumerator cacheEnumerator = (IDictionaryEnumerator)((IEnumerable)memoryCache).GetEnumerator();
+            while (cacheEnumerator.MoveNext())
+            {
+                memoryCache.Remove(cacheEnumerator.Key.ToString());
+            }
+
         }
     }
 }
