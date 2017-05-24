@@ -41,11 +41,11 @@ namespace RuleEvaluator
             return result;
         }
 
+        private static readonly Regex _Regex = new Regex(@"INTERVAL(?<FromOpenedClosed>[\(<])(?<FromNumber>[0-9]+([\.,\,][0-9]*)?);(?<ToNumber>[0-9]+([\.,\,][0-9]*)?)(?<ToOpenedClosed>[\)>])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         public static CellValidateFilterDecimalInterval CreateFromString(string p_Data)
         {
-            //Regex regex = new Regex(@"INTERVAL(?<FromOpenedClosed>[\(<])(?<FromNumber>\d*),(?<ToNumber>\d*)(?<ToOpenedClosed>[\)>])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-            Regex regex = new Regex(@"INTERVAL(?<FromOpenedClosed>[\(<])(?<FromNumber>[0-9]+([\.,\,][0-9]*)?);(?<ToNumber>[0-9]+([\.,\,][0-9]*)?)(?<ToOpenedClosed>[\)>])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-            var match = regex.Match(p_Data.Replace(" ","").Replace(",","."));
+            var match = _Regex.Match(p_Data.Replace(" ","").Replace(",","."));
             if (match.Success)
             {
                 var ci = CultureInfo.InvariantCulture.Clone() as CultureInfo;
