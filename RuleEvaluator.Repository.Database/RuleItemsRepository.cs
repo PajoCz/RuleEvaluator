@@ -50,7 +50,7 @@ namespace RuleEvaluator.Repository.Database
                     List<object> rowData = data[iRow].Values.ToList();
                     for (var iColumn = 0; iColumn < columnSettings.Count; iColumn++)
                     {
-                        cellValues[iColumn] = _CellFactory.CreateCell(rowData[columnSettings[iColumn].Index], columnSettings[iColumn].InputOutput);
+                        cellValues[iColumn] = _CellFactory.CreateCell(rowData[columnSettings[iColumn].Index] ?? string.Empty, columnSettings[iColumn].InputOutput);
                     }
                     result.AddRuleItem(cellValues);
                 }
