@@ -1,9 +1,11 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Diagnostics;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
 using NUnit.Framework;
+using RuleEvaluator.Repository.Contract;
 
 namespace RuleEvaluator.Repository.Database.Test
 {
@@ -29,7 +31,7 @@ namespace RuleEvaluator.Repository.Database.Test
             var cache = _WindsorContainer.Resolve<ICacheWrapper>();
 
             //Act
-            var repo = new RuleItemsRepository(cf, cache, ConfigurationManager.AppSettings.Get("ConnectionString"), "Ciselnik.p_GetSchemaColBySchemaKod", "Ciselnik.p_GetTranslatorDataBySchemaKod");
+            var repo = new RuleItemsRepository(cf, cache, ConfigurationManager.AppSettings.Get("ConnectionString"), "Ciselnik.p_GetSchemaColBySchemaKod", "Ciselnik.p_GetTranslatorDataBySchemaKod", TimeSpan.FromMinutes(10));
             var items = repo.Load("OdhadBodu");
             var found = items.Find("A", "B", "C", "7BN Perspektiva Důchod", 15);
             var outputValue = found.Output(0).FilterValue;

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuleEvaluator", "RuleEvaluator\RuleEvaluator.csproj", "{C1228381-1F09-4C8B-A0C9-F30F11D64A59}"
 EndProject
@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		RuleEvaluator.nuspec = RuleEvaluator.nuspec
 		RuleEvaluator.Repository.Database.nuspec = RuleEvaluator.Repository.Database.nuspec
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuleEvaluator.Repository.Contract", "RuleEvaluator.Repository.Contract\RuleEvaluator.Repository.Contract.csproj", "{5B96A53E-556F-4F07-94D6-2DC8ED0F953D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,8 +49,15 @@ Global
 		{99031304-9257-48ED-8457-E16A72F263C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99031304-9257-48ED-8457-E16A72F263C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99031304-9257-48ED-8457-E16A72F263C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B96A53E-556F-4F07-94D6-2DC8ED0F953D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B96A53E-556F-4F07-94D6-2DC8ED0F953D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B96A53E-556F-4F07-94D6-2DC8ED0F953D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B96A53E-556F-4F07-94D6-2DC8ED0F953D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7C0E7359-7856-461C-A927-A6E6FCDB6B0E}
 	EndGlobalSection
 EndGlobal

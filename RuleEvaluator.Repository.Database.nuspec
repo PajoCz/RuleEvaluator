@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>RuleEvaluator.Repository.Database</id>
-    <version>2.4.0</version>
+    <version>2.5.0</version>
     <authors>pbalas</authors>
     <owners>pbalas</owners>
     <licenseUrl>https://github.com/PajoCz/RuleEvaluator/blob/master/licence.txt</licenseUrl>
@@ -20,7 +20,9 @@
   </metadata>
 
   <files>
-    <file src="RuleEvaluator.Repository.Database\bin\Release\RuleEvaluator.Repository.Database.dll" target="lib\net45"/>
-    <file src="RuleEvaluator.Repository.Database\bin\Release\RuleEvaluator.Repository.Database.pdb" target="lib\net45"/>
+    <file src="RuleEvaluator.Repository.Database\bin\Debug\RuleEvaluator.Repository.Database.dll" target="lib\net45"/>
+    <file src="RuleEvaluator.Repository.Database\bin\Debug\RuleEvaluator.Repository.Database.pdb" target="lib\net45"/>
+    <file src="RuleEvaluator.Repository.Database\bin\Debug\RuleEvaluator.Repository.Contract.dll" target="lib\net45"/>
+    <file src="RuleEvaluator.Repository.Database\bin\Debug\RuleEvaluator.Repository.Contract.pdb" target="lib\net45"/>
   </files>
 </package>

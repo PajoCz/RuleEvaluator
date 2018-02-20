@@ -4,29 +4,32 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using Dapper;
+using RuleEvaluator.Repository.Contract;
 
 namespace RuleEvaluator.Repository.Database
 {
-    public class RuleItemsRepository
+    public class RuleItemsRepository : IRuleItemsRepository
     {
         private readonly ICellFactory _CellFactory;
         private readonly ICacheWrapper _CacheWrapper;
         private readonly string _ConnectionString;
         private readonly string _SplNameForColumns;
         private readonly string _SplNameForData;
+        private readonly TimeSpan _CacheRelativeExpirationDefault;
 
-        public RuleItemsRepository(ICellFactory p_CellFactory, ICacheWrapper p_CacheWrapper, string p_ConnectionString, string p_SplNameForColumns, string p_SplNameForData)
+        public RuleItemsRepository(ICellFactory p_CellFactory, ICacheWrapper p_CacheWrapper, string p_ConnectionString, string p_SplNameForColumns, string p_SplNameForData, TimeSpan p_CacheRelativeExpirationDefault)
         {
             _CellFactory = p_CellFactory;
             _CacheWrapper = p_CacheWrapper;
             _ConnectionString = p_ConnectionString;
             _SplNameForColumns = p_SplNameForColumns;
             _SplNameForData = p_SplNameForData;
+            _CacheRelativeExpirationDefault = p_CacheRelativeExpirationDefault;
         }
 
         public RuleItems Load(string p_Key)
         {
-            return Load(p_Key, TimeSpan.FromMinutes(10));
+            return Load(p_Key, _CacheRelativeExpirationDefault);
         }
 
         public RuleItems Load(string p_Key, TimeSpan p_CacheRelativeExpiration)
@@ -34,7 +37,19 @@ namespace RuleEvaluator.Repository.Database
             return (RuleItems)_CacheWrapper.GetItem(() => LoadImpl(p_Key), p_CacheRelativeExpiration);
         }
 
-        public RuleItems LoadImpl(string p_Key)
+        public string GetRule(string p_Key, params object[] p_Parameters)
+        {
+            var ruleItems = Load(p_Key, TimeSpan.FromMinutes(5));
+            var found = ruleItems.Find(p_Parameters);
+            if (found == null)
+                return string.Empty;
+
+            var result = found.CellsOnlyOutput[0].FilterValue;
+            var resultAsString = result?.ToString() ?? string.Empty;
+            return resultAsString;
+        }
+
+        private RuleItems LoadImpl(string p_Key)
         {
             using (var conn = new SqlConnection(_ConnectionString))
             {

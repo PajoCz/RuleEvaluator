@@ -62,6 +62,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RuleEvaluator.Repository.Contract\RuleEvaluator.Repository.Contract.csproj">
+      <Project>{5B96A53E-556F-4F07-94D6-2DC8ED0F953D}</Project>
+      <Name>RuleEvaluator.Repository.Contract</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RuleEvaluator.Repository.Database\RuleEvaluator.Repository.Database.csproj">
       <Project>{510f4425-288c-44a4-952c-f83dc5aef623}</Project>
       <Name>RuleEvaluator.Repository.Database</Name>

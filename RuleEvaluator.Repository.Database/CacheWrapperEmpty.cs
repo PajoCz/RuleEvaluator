@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using RuleEvaluator.Repository.Contract;
 
 namespace RuleEvaluator.Repository.Database
 {

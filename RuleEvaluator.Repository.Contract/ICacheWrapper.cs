@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace RuleEvaluator.Repository.Database
+namespace RuleEvaluator.Repository.Contract
 {
     public interface ICacheWrapper
     {

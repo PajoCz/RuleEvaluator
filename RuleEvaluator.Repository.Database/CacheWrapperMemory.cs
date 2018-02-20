@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.Caching;
 using System.Text;
+using RuleEvaluator.Repository.Contract;
 
 namespace RuleEvaluator.Repository.Database
 {

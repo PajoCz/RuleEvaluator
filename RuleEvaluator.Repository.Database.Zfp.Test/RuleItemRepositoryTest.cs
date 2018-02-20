@@ -1,8 +1,10 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using System.Configuration;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
+using RuleEvaluator.Repository.Contract;
 
 namespace RuleEvaluator.Repository.Database.Zfp.Test
 {
@@ -27,7 +29,7 @@ namespace RuleEvaluator.Repository.Database.Zfp.Test
                 var cf = _WindsorContainer.Resolve<ICellFactory>();
                 var cache = _WindsorContainer.Resolve<ICacheWrapper>();
                 var repo = new RuleItemsRepository(cf, cache, ConfigurationManager.AppSettings.Get("ConnectionString"), "Ciselnik.p_GetSchemaColBySchemaKod",
-                    "Ciselnik.p_GetTranslatorDataBySchemaKod");
+                    "Ciselnik.p_GetTranslatorDataBySchemaKod", TimeSpan.FromMinutes(10));
                 return repo;
             }
         }
