@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>RuleEvaluator.Repository.Contract</id>
+    <version>3.0.0</version>
+    <authors>pbalas</authors>
+    <owners>pbalas</owners>
+    <licenseUrl>https://github.com/PajoCz/RuleEvaluator/blob/master/licence.txt</licenseUrl>
+    <projectUrl>https://github.com/PajoCz/RuleEvaluator</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>RuleEvaluator.Repository.Contract</description>
+    <copyright>Copyright 2016-2018 Pavel Balas</copyright>
+    <tags>Rule Evaluator Repository Contract</tags>
+    <dependencies>
+      <group targetFramework="net45">
+        <dependency id="RuleEvaluator" version="2.1.0" />
+      </group>
+    </dependencies>
+  </metadata>
+
+  <files>
+    <file src="RuleEvaluator.Repository.Contract\bin\Debug\RuleEvaluator.Repository.Contract.dll" target="lib\net45"/>
+    <file src="RuleEvaluator.Repository.Contract\bin\Debug\RuleEvaluator.Repository.Contract.pdb" target="lib\net45"/>
+  </files>
+</package>
