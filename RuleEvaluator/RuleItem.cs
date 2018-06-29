@@ -47,9 +47,14 @@ namespace RuleEvaluator
             }
         }
 
-        public bool ValidateInput(params object[] p_Data)
+        public bool ValidateInput(string p_RuleItemsName, params object[] p_Data)
         {
-            if (p_Data?.Length != CellsOnlyInput.Count) throw new ArgumentOutOfRangeException(nameof(p_Data));
+            if (p_Data?.Length != CellsOnlyInput.Count)
+                throw new ArgumentOutOfRangeException(
+                    string.IsNullOrEmpty(p_RuleItemsName)
+                        ? $"Input data with {p_Data?.Length} parameters but expected is {CellsOnlyInput.Count} input parameters"
+                        : $"RuleEvaluator '{p_RuleItemsName}' finding with {p_Data?.Length} parameters as input data but expected is {CellsOnlyInput.Count} input parameters"
+                    , nameof(p_Data));
 
             for (var i = 0; i < CellsOnlyInput.Count; i++)
             {

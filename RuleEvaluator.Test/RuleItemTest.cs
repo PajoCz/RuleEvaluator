@@ -157,7 +157,7 @@ namespace RuleEvaluator.Test
             var ri = new RuleItem(cf, cellInput1);
 
             //Act with Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => ri.ValidateInput());
+            Assert.Throws<ArgumentOutOfRangeException>(() => ri.ValidateInput("test"));
         }
     }
 }

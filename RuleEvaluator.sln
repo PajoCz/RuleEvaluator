@@ -16,8 +16,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AAA0A978-DAC9-4CA2-95D8-8A8DDFFB3B98}"
 	ProjectSection(SolutionItems) = preProject
 		nuget-pack-RuleEvaluator.nuspec.bat = nuget-pack-RuleEvaluator.nuspec.bat
+		nuget-pack-RuleEvaluator.Repository.Contract.nuspec.bat = nuget-pack-RuleEvaluator.Repository.Contract.nuspec.bat
 		nuget-pack-RuleEvaluator.Repository.Database.nuspec.bat = nuget-pack-RuleEvaluator.Repository.Database.nuspec.bat
 		RuleEvaluator.nuspec = RuleEvaluator.nuspec
+		RuleEvaluator.Repository.Contract.nuspec = RuleEvaluator.Repository.Contract.nuspec
 		RuleEvaluator.Repository.Database.nuspec = RuleEvaluator.Repository.Database.nuspec
 	EndProjectSection
 EndProject
