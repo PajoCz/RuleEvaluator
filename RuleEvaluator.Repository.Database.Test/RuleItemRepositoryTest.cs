@@ -38,6 +38,7 @@ namespace RuleEvaluator.Repository.Database.Test
 
             //Assert
             Assert.AreEqual("C2/240*0.7", outputValue);
+            Assert.AreEqual(89, found.PrimaryKey?.FilterValue, "PrimaryKey of found item must be filled when readed from Database");
         }
 
         //[Test]

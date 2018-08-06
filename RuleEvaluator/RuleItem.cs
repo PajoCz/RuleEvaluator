@@ -70,5 +70,7 @@ namespace RuleEvaluator
         {
             return CellsOnlyOutput[p_OutputIndex];
         }
+
+        public ICell PrimaryKey => Cells.Find(c => c.InputOutputType == CellInputOutputType.PrimaryKey);
     }
 }

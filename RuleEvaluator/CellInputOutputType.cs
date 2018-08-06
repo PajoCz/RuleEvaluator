@@ -9,6 +9,10 @@ namespace RuleEvaluator
         /// <summary>
         /// Cell is not used for searching. Contains output data in searched (validated) RuleItem
         /// </summary>
-        Output
+        Output,
+        /// <summary>
+        /// Cell is not used for searching. Contains primary key value
+        /// </summary>
+        PrimaryKey,
     }
 }
