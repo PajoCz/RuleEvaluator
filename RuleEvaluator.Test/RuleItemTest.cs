@@ -56,7 +56,7 @@ namespace RuleEvaluator.Test
             var ri = new RuleItem(cf, input, cf.CreateCell(output, CellInputOutputType.Output));
 
             //Assert
-            Assert.IsTrue(ri.ValidateInput(input));
+            Assert.IsTrue(ri.ValidateInput(_RuleItemsName, input));
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace RuleEvaluator.Test
             var ri = new RuleItem(cf, input, cf.CreateCell(output, CellInputOutputType.Output));
 
             //Assert
-            Assert.IsFalse(ri.ValidateInput(input + "changed"));
+            Assert.IsFalse(ri.ValidateInput(_RuleItemsName, input + "changed"));
         }
 
         [Test]
@@ -87,7 +87,7 @@ namespace RuleEvaluator.Test
             var ri = new RuleItem(cf, input1, input2, cf.CreateCell(output, CellInputOutputType.Output));
 
             //Assert
-            Assert.IsTrue(ri.ValidateInput(input1, input2));
+            Assert.IsTrue(ri.ValidateInput(_RuleItemsName, input1, input2));
         }
 
         [Test]
@@ -103,7 +103,7 @@ namespace RuleEvaluator.Test
             var ri = new RuleItem(cf, input1, input2, cf.CreateCell(output, CellInputOutputType.Output));
 
             //Assert
-            Assert.IsFalse(ri.ValidateInput(input1, input2 + "changed"));
+            Assert.IsFalse(ri.ValidateInput(_RuleItemsName, input1, input2 + "changed"));
         }
 
         [Test]
@@ -116,7 +116,7 @@ namespace RuleEvaluator.Test
             var ri = new RuleItem(cf, cellInput1, cellInput2);
 
             //Act with Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => ri.ValidateInput(cellInput1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => ri.ValidateInput(_RuleItemsName, cellInput1));
         }
 
         [Test]
@@ -129,8 +129,10 @@ namespace RuleEvaluator.Test
             var ri = new RuleItem(cf, cellInput1);
 
             //Act with Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => ri.ValidateInput(cellInput1, cellInput2));
+            Assert.Throws<ArgumentOutOfRangeException>(() => ri.ValidateInput(_RuleItemsName, cellInput1, cellInput2));
         }
+
+        const string _RuleItemsName = "RuleItemsName";
 
         [Test]
         public void ValidateInput_IgnoreRuleItemWithCellOutput()
@@ -142,7 +144,7 @@ namespace RuleEvaluator.Test
             var ri = new RuleItem(cf, cellInput1, cf.CreateCell("output", CellInputOutputType.Output), cellInput2);
 
             //Act
-            var validated = ri.ValidateInput(cellInput1, cellInput2);
+            var validated = ri.ValidateInput(_RuleItemsName, cellInput1, cellInput2);
 
             //Assert
             Assert.IsTrue(validated);
