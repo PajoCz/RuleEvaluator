@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>RuleEvaluator.Repository.Contract</id>
-    <version>3.1.0</version>
+    <version>3.2.0</version>
     <authors>pbalas</authors>
     <owners>pbalas</owners>
     <licenseUrl>https://github.com/PajoCz/RuleEvaluator/blob/master/licence.txt</licenseUrl>
@@ -13,7 +13,7 @@
     <tags>Rule Evaluator Repository Contract</tags>
     <dependencies>
       <group targetFramework="net45">
-        <dependency id="RuleEvaluator" version="2.2.0" />
+        <dependency id="RuleEvaluator" version="2.3.0" />
       </group>
     </dependencies>
   </metadata>

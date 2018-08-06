@@ -36,5 +36,10 @@ namespace RuleEvaluator
         {
             return Data.Find(i => i.ValidateInput(_Name, p_FindParams));
         }
+
+        public List<RuleItem> GetAll()
+        {
+            return Data;
+        }
     }
 }
