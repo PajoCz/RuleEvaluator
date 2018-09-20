@@ -22,7 +22,7 @@ namespace RuleEvaluator
 
             //always try Regex. Must be last Chainable module.
 
-            return new Regex("^" + p_CellFilter + "$").IsMatch(p_ValueDataForValidating?.ToString() ?? String.Empty);
+            return new Regex("^" + p_CellFilter + "$", RegexOptions.Singleline).IsMatch(p_ValueDataForValidating?.ToString() ?? String.Empty);
         }
     }
 }

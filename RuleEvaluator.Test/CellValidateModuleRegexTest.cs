@@ -18,6 +18,10 @@ namespace RuleEvaluator.Test
         [TestCase("1[1-9]", "20", ExpectedResult = false)]
         [TestCase("1[1-9]", 111, ExpectedResult = false)]
         [TestCase("1[1-9]", "111", ExpectedResult = false)]
+        [TestCase("Text.*", "Text\nNewLine", ExpectedResult = true)]
+        [TestCase("Text.*", "Text\r\nNewLine", ExpectedResult = true)]
+        [TestCase("Text\\nNew.*", "Text\nNewLine", ExpectedResult = true)]
+        [TestCase("Text\\nOld.*", "Text\nNewLine", ExpectedResult = false)]
         public bool? Validate_ValueDataNotNull(object p_CellFilter, object p_ValueDataForValidating)
         {
             CellValidateModuleRegex validateModule = new CellValidateModuleRegex();

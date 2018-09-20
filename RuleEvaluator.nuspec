@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>RuleEvaluator</id>
-    <version>2.3.0</version>
+    <version>2.4.0</version>
     <authors>pbalas</authors>
     <owners>pbalas</owners>
     <licenseUrl>https://github.com/PajoCz/RuleEvaluator/licence.txt</licenseUrl>
