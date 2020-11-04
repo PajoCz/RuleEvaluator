@@ -16,6 +16,7 @@ namespace RuleEvaluator.Repository.Database
         private readonly string _SplNameForColumns;
         private readonly string _SplNameForData;
         private readonly TimeSpan _CacheRelativeExpirationDefault;
+        public IRuleItemsCall RuleItemsCall { get; set; }
 
         public RuleItemsRepository(ICellFactory p_CellFactory, ICacheWrapper p_CacheWrapper, string p_ConnectionString, string p_SplNameForColumns, string p_SplNameForData, TimeSpan p_CacheRelativeExpirationDefault)
         {
@@ -75,7 +76,7 @@ namespace RuleEvaluator.Repository.Database
                 List<ColumnSettings> columnSettings = conn.Query<ColumnSettings>(_SplNameForColumns, new { Key = p_Key }, commandType: CommandType.StoredProcedure).ToList();
                 List<IDictionary<string, object>> data = (conn.Query(_SplNameForData, new { Key = p_Key }, commandType: CommandType.StoredProcedure) as IEnumerable<IDictionary<string, object>>).ToList();
 
-                var result = new RuleItems(_CellFactory, p_Key);
+                var result = new RuleItems(_CellFactory, RuleItemsCall, p_Key);
                 foreach (var d in data)
                 {
                     object[] cellValues = new object[columnSettings.Count];

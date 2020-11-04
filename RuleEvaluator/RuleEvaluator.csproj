@@ -50,6 +50,7 @@
     <Compile Include="ICell.cs" />
     <Compile Include="ICellFactory.cs" />
     <Compile Include="ICellValidateModule.cs" />
+    <Compile Include="IRuleItemsCall.cs" />
     <Compile Include="RuleItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuleItems.cs" />

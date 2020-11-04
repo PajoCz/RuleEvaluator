@@ -1,12 +1,13 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RuleEvaluator
 {
     public class RuleItems
     {
-        private readonly string _Name;
-        public string Name => _Name;
+        public readonly string Name;
         private readonly ICellFactory _CellFactory;
+        private readonly IRuleItemsCall _RuleItemsCall;
         private readonly List<RuleItem> Data;
 
         public RuleItems(ICellFactory p_CellFactory)
@@ -15,10 +16,11 @@ namespace RuleEvaluator
             Data = new List<RuleItem>();
         }
 
-        public RuleItems(ICellFactory p_CellFactory, string p_Name)
+        public RuleItems(ICellFactory p_CellFactory, IRuleItemsCall p_RuleItemsCall, string p_Name)
         {
             _CellFactory = p_CellFactory;
-            _Name = p_Name;
+            _RuleItemsCall = p_RuleItemsCall;
+            Name = p_Name;
             Data = new List<RuleItem>();
         }
 
@@ -29,16 +31,39 @@ namespace RuleEvaluator
 
         public List<RuleItem> FindAll(params object[] p_FindParams)
         {
-            return Data.FindAll(i => i.ValidateInput(_Name, p_FindParams));
+            var result = Data.FindAll(i => i.ValidateInput(Name, p_FindParams));
+            _RuleItemsCall?.FindCalled(new RuleItemsCallFindCalled()
+            {
+                Method = RuleItemsCallFindCalledMethod.FindAll,
+                Name = Name,
+                Inputs = p_FindParams?.ToList(),
+                Outputs = result.Select(r => r.CellsOnlyOutput.Select(c => c.FilterValue).ToList()).ToList()
+            });
+            return result;
         }
 
         public RuleItem Find(params object[] p_FindParams)
         {
-            return Data.Find(i => i.ValidateInput(_Name, p_FindParams));
+            var result = Data.Find(i => i.ValidateInput(Name, p_FindParams));
+            _RuleItemsCall?.FindCalled(new RuleItemsCallFindCalled()
+            {
+                Method = RuleItemsCallFindCalledMethod.Find,
+                Name = Name,
+                Inputs = p_FindParams?.ToList(),
+                Outputs = result != null ? new List<List<object>>() {result.CellsOnlyOutput.Select(c => c.FilterValue).ToList()} : null
+            });
+            return result;
         }
 
         public List<RuleItem> GetAll()
         {
+            _RuleItemsCall?.FindCalled(new RuleItemsCallFindCalled()
+            {
+                Method = RuleItemsCallFindCalledMethod.GetAll,
+                Name = Name,
+                Inputs = null,
+                Outputs = Data?.Select(r => r.CellsOnlyOutput.Select(c => c.FilterValue).ToList()).ToList()
+            });
             return Data;
         }
     }
