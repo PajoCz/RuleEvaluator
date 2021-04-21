@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
 
 namespace RuleEvaluator
@@ -16,13 +17,16 @@ namespace RuleEvaluator
         //    _NextModule = p_NextModule;
         //}
 
+        private ConcurrentDictionary<string, Regex> _RegexCache = new ConcurrentDictionary<string, Regex>();
+        
         public bool? Validate(object p_CellFilter, object p_ValueDataForValidating)
         {
             if (p_CellFilter == null) throw new ArgumentNullException(nameof(p_CellFilter));
 
             //always try Regex. Must be last Chainable module.
 
-            return new Regex("^" + p_CellFilter + "$", RegexOptions.Singleline).IsMatch(p_ValueDataForValidating?.ToString() ?? String.Empty);
+            var regex = _RegexCache.GetOrAdd(p_CellFilter.ToString(), cellFilter => new Regex("^" + cellFilter + "$", RegexOptions.Singleline));
+            return regex.IsMatch(p_ValueDataForValidating?.ToString() ?? string.Empty);
         }
     }
 }
