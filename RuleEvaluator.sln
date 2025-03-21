@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29519.87
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuleEvaluator", "RuleEvaluator\RuleEvaluator.csproj", "{C1228381-1F09-4C8B-A0C9-F30F11D64A59}"
 EndProject
@@ -10,8 +10,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuleEvaluator.Repository.Database", "RuleEvaluator.Repository.Database\RuleEvaluator.Repository.Database.csproj", "{510F4425-288C-44A4-952C-F83DC5AEF623}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuleEvaluator.Repository.Database.Test", "RuleEvaluator.Repository.Database.Test\RuleEvaluator.Repository.Database.Test.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuleEvaluator.Repository.Database.Zfp.Test", "RuleEvaluator.Repository.Database.Zfp.Test\RuleEvaluator.Repository.Database.Zfp.Test.csproj", "{99031304-9257-48ED-8457-E16A72F263C6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AAA0A978-DAC9-4CA2-95D8-8A8DDFFB3B98}"
 	ProjectSection(SolutionItems) = preProject
@@ -47,10 +45,6 @@ Global
 		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{99031304-9257-48ED-8457-E16A72F263C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{99031304-9257-48ED-8457-E16A72F263C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{99031304-9257-48ED-8457-E16A72F263C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{99031304-9257-48ED-8457-E16A72F263C6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5B96A53E-556F-4F07-94D6-2DC8ED0F953D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5B96A53E-556F-4F07-94D6-2DC8ED0F953D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B96A53E-556F-4F07-94D6-2DC8ED0F953D}.Release|Any CPU.ActiveCfg = Release|Any CPU
