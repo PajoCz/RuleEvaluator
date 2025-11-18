@@ -1,1 +1,0 @@
-nuget pack RuleEvaluator.Repository.Contract.nuspec

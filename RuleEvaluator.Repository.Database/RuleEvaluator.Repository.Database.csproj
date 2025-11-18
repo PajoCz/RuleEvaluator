@@ -1,72 +1,42 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{510F4425-288C-44A4-952C-F83DC5AEF623}</ProjectGuid>
+    <TargetFrameworks>net472;net8.0</TargetFrameworks>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RuleEvaluator.Repository.Database</RootNamespace>
-    <AssemblyName>RuleEvaluator.Repository.Database</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <LangVersion>latest</LangVersion>
+    <NoWarn>CS1591</NoWarn>
+    
+    <!-- Disable auto-generated assembly attributes to avoid conflicts with AssemblyInfo.cs -->
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    
+    <!-- NuGet Package Properties -->
+    <PackageId>RuleEvaluator.Repository.Database</PackageId>
+    <Version>4.0.0</Version>
+    <Authors>PajoCz</Authors>
+    <Company>PajoCz</Company>
+    <Description>Database repository implementation for RuleEvaluator with support for .NET Framework 4.7.2 and .NET 8.0</Description>
+    <PackageProjectUrl>https://github.com/PajoCz/RuleEvaluator</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/PajoCz/RuleEvaluator</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Dapper, Version=1.50.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dapper.1.50.2\lib\net45\Dapper.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
+
+  <!-- .NET Framework specific references -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <Reference Include="System.Runtime.Caching" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="CacheWrapperEmpty.cs" />
-    <Compile Include="CacheWrapperMemory.cs" />
-    <Compile Include="RuleItemsRepository.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+
+  <!-- .NET 8.0 specific references for missing APIs -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+    <PackageReference Include="System.Runtime.Caching" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\RuleEvaluator.Repository.Contract\RuleEvaluator.Repository.Contract.csproj">
-      <Project>{5B96A53E-556F-4F07-94D6-2DC8ED0F953D}</Project>
-      <Name>RuleEvaluator.Repository.Contract</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RuleEvaluator\RuleEvaluator.csproj">
-      <Project>{C1228381-1F09-4C8B-A0C9-F30F11D64A59}</Project>
-      <Name>RuleEvaluator</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\RuleEvaluator.Repository.Contract\RuleEvaluator.Repository.Contract.csproj" />
+    <ProjectReference Include="..\RuleEvaluator\RuleEvaluator.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+    <PackageReference Include="Dapper" Version="2.1.35" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

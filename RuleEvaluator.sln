@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuleEvaluator", "RuleEvaluator\RuleEvaluator.csproj", "{C1228381-1F09-4C8B-A0C9-F30F11D64A59}"
 EndProject
@@ -10,16 +10,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuleEvaluator.Repository.Database", "RuleEvaluator.Repository.Database\RuleEvaluator.Repository.Database.csproj", "{510F4425-288C-44A4-952C-F83DC5AEF623}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuleEvaluator.Repository.Database.Test", "RuleEvaluator.Repository.Database.Test\RuleEvaluator.Repository.Database.Test.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AAA0A978-DAC9-4CA2-95D8-8A8DDFFB3B98}"
-	ProjectSection(SolutionItems) = preProject
-		nuget-pack-RuleEvaluator.nuspec.bat = nuget-pack-RuleEvaluator.nuspec.bat
-		nuget-pack-RuleEvaluator.Repository.Contract.nuspec.bat = nuget-pack-RuleEvaluator.Repository.Contract.nuspec.bat
-		nuget-pack-RuleEvaluator.Repository.Database.nuspec.bat = nuget-pack-RuleEvaluator.Repository.Database.nuspec.bat
-		RuleEvaluator.nuspec = RuleEvaluator.nuspec
-		RuleEvaluator.Repository.Contract.nuspec = RuleEvaluator.Repository.Contract.nuspec
-		RuleEvaluator.Repository.Database.nuspec = RuleEvaluator.Repository.Database.nuspec
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuleEvaluator.Repository.Contract", "RuleEvaluator.Repository.Contract\RuleEvaluator.Repository.Contract.csproj", "{5B96A53E-556F-4F07-94D6-2DC8ED0F953D}"
 EndProject
