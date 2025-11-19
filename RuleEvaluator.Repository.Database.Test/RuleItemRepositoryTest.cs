@@ -23,15 +23,48 @@ namespace RuleEvaluator.Repository.Database.Test
             }
         }
 
+        private static DatabaseType GetDatabaseType()
+        {
+            var dbTypeString = ConfigurationManager.AppSettings.Get("ConnectionStringType");
+            if (string.IsNullOrEmpty(dbTypeString))
+                return DatabaseType.MSSQL;
+
+            if (Enum.TryParse<DatabaseType>(dbTypeString, true, out var dbType))
+                return dbType;
+
+            return DatabaseType.MSSQL;
+        }
+
+        [Test]
+        public void IntegrityTest_RepoLoad_FindOneRuleItemAndCheckFilterValue_LocalDatabase()
+        {
+            //Arrange
+            var cf = _WindsorContainer.Resolve<ICellFactory>();
+            var cache = _WindsorContainer.Resolve<ICacheWrapper>();
+            var dbType = GetDatabaseType();
+
+            //Act
+            var repo = new RuleItemsRepository(cf, cache, ConfigurationManager.AppSettings.Get("ConnectionString"), "Rules.p_GetSchemaColBySchemaKey", "Rules.p_GetTranslatorDataBySchemaKey", TimeSpan.FromMinutes(10), dbType);
+            //var repo = new RuleItemsRepository(cf, cache, ConfigurationManager.AppSettings.Get("ConnectionString"), "rules.p_getschemacol_byschemakey", "rules.p_gettranslatordata_byschemakey", TimeSpan.FromMinutes(10), dbType);
+            var items = repo.Load("Translator1Schema1");
+            var found = items.Find("a", "0");
+            var outputValue = found.Output(0).FilterValue;
+
+            //Assert
+            Assert.AreEqual("Result1", outputValue);
+            Assert.AreEqual(1, found.PrimaryKey?.FilterValue, "PrimaryKey of found item must be filled when readed from Database");
+        }
+
         [Test]
         public void IntegrityTest_RepoLoad_FindOneRuleItemAndCheckFilterValue()
         {
             //Arrange
             var cf = _WindsorContainer.Resolve<ICellFactory>();
             var cache = _WindsorContainer.Resolve<ICacheWrapper>();
+            var dbType = GetDatabaseType();
 
             //Act
-            var repo = new RuleItemsRepository(cf, cache, ConfigurationManager.AppSettings.Get("ConnectionString"), "Ciselnik.p_GetSchemaColBySchemaKod", "Ciselnik.p_GetTranslatorDataBySchemaKod", TimeSpan.FromMinutes(10));
+            var repo = new RuleItemsRepository(cf, cache, ConfigurationManager.AppSettings.Get("ConnectionString"), "Ciselnik.p_GetSchemaColBySchemaKod", "Ciselnik.p_GetTranslatorDataBySchemaKod", TimeSpan.FromMinutes(10), dbType);
             var items = repo.Load("OdhadBodu");
             var found = items.Find("A", "B", "C", "7BN Perspektiva Důchod", 15);
             var outputValue = found.Output(0).FilterValue;

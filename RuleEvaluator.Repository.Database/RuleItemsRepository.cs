@@ -8,10 +8,17 @@ using Microsoft.Data.SqlClient;
 #endif
 using System.Linq;
 using Dapper;
+using Npgsql;
 using RuleEvaluator.Repository.Contract;
 
 namespace RuleEvaluator.Repository.Database
 {
+    public enum DatabaseType
+    {
+        MSSQL,
+        PostgreSQL
+    }
+
     public class RuleItemsRepository : IRuleItemsRepository
     {
         private readonly ICellFactory _CellFactory;
@@ -20,9 +27,10 @@ namespace RuleEvaluator.Repository.Database
         private readonly string _SplNameForColumns;
         private readonly string _SplNameForData;
         private readonly TimeSpan _CacheRelativeExpirationDefault;
+        private readonly DatabaseType _DatabaseType;
         public IRuleItemsCall RuleItemsCall { get; set; }
 
-        public RuleItemsRepository(ICellFactory p_CellFactory, ICacheWrapper p_CacheWrapper, string p_ConnectionString, string p_SplNameForColumns, string p_SplNameForData, TimeSpan p_CacheRelativeExpirationDefault)
+        public RuleItemsRepository(ICellFactory p_CellFactory, ICacheWrapper p_CacheWrapper, string p_ConnectionString, string p_SplNameForColumns, string p_SplNameForData, TimeSpan p_CacheRelativeExpirationDefault, DatabaseType p_DatabaseType = DatabaseType.MSSQL)
         {
             _CellFactory = p_CellFactory;
             _CacheWrapper = p_CacheWrapper;
@@ -30,6 +38,7 @@ namespace RuleEvaluator.Repository.Database
             _SplNameForColumns = p_SplNameForColumns;
             _SplNameForData = p_SplNameForData;
             _CacheRelativeExpirationDefault = p_CacheRelativeExpirationDefault;
+            _DatabaseType = p_DatabaseType;
         }
 
         public RuleItems Load(string p_Key)
@@ -73,12 +82,29 @@ namespace RuleEvaluator.Repository.Database
 
         private RuleItems LoadImpl(string p_Key)
         {
-            using (var conn = new SqlConnection(_ConnectionString))
+            IDbConnection conn = _DatabaseType == DatabaseType.PostgreSQL 
+                ? (IDbConnection)new NpgsqlConnection(_ConnectionString) 
+                : new SqlConnection(_ConnectionString);
+
+            using (conn)
             {
                 conn.Open();
 
-                List<ColumnSettings> columnSettings = conn.Query<ColumnSettings>(_SplNameForColumns, new { Key = p_Key }, commandType: CommandType.StoredProcedure).ToList();
-                List<IDictionary<string, object>> data = (conn.Query(_SplNameForData, new { Key = p_Key }, commandType: CommandType.StoredProcedure) as IEnumerable<IDictionary<string, object>>).ToList();
+                List<ColumnSettings> columnSettings;
+                List<IDictionary<string, object>> data;
+                
+                if (_DatabaseType == DatabaseType.PostgreSQL)
+                {
+                    // PostgreSQL SELECT
+                    columnSettings = conn.Query<ColumnSettings>($"SELECT * FROM {_SplNameForColumns}(@key)", new { key = p_Key }).ToList();
+                    data = (conn.Query($"SELECT * FROM {_SplNameForData}(@key)", new { key = p_Key }) as IEnumerable<IDictionary<string, object>>).ToList();
+                }
+                else
+                {
+                    // MSSQL CommandType.StoredProcedure
+                    columnSettings = conn.Query<ColumnSettings>(_SplNameForColumns, new { Key = p_Key }, commandType: CommandType.StoredProcedure).ToList();
+                    data = (conn.Query(_SplNameForData, new { Key = p_Key }, commandType: CommandType.StoredProcedure) as IEnumerable<IDictionary<string, object>>).ToList();
+                }
 
                 var result = new RuleItems(_CellFactory, RuleItemsCall, p_Key);
                 foreach (var d in data)

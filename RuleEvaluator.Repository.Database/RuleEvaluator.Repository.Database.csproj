@@ -10,14 +10,23 @@
     
     <!-- NuGet Package Properties -->
     <PackageId>RuleEvaluator.Repository.Database</PackageId>
-    <Version>4.0.0</Version>
+    <Version>4.1.0</Version>
     <Authors>PajoCz</Authors>
     <Company>PajoCz</Company>
-    <Description>Database repository implementation for RuleEvaluator with support for .NET Framework 4.7.2 and .NET 8.0</Description>
+    <Description>Database repository implementation for RuleEvaluator with support for .NET Framework 4.7.2 and .NET 8.0. Supports MSSQL and PostgreSQL databases with optimized Npgsql version compatibility.</Description>
     <PackageProjectUrl>https://github.com/PajoCz/RuleEvaluator</PackageProjectUrl>
     <RepositoryUrl>https://github.com/PajoCz/RuleEvaluator</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>rule-evaluator;database;repository;mssql;postgresql;npgsql;dapper</PackageTags>
+    <PackageReleaseNotes>
+Version 4.1.0:
+- Added PostgreSQL support with optimized function calling
+- Different Npgsql versions for optimal compatibility: 7.0.8 for .NET Framework 4.7.2, 8.0.5 for .NET 8.0
+- Fixed assembly binding conflicts with System.Runtime.CompilerServices.Unsafe
+- Database-specific query execution (SELECT for PostgreSQL functions, EXEC for MSSQL procedures)
+- Multi-targeting support for .NET Framework 4.7.2 and .NET 8.0
+    </PackageReleaseNotes>
   </PropertyGroup>
 
   <!-- .NET Framework specific references -->
@@ -27,8 +36,8 @@
 
   <!-- .NET 8.0 specific references for missing APIs -->
   <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-    <PackageReference Include="System.Runtime.Caching" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
+    <PackageReference Include="System.Runtime.Caching" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,7 +45,20 @@
     <ProjectReference Include="..\RuleEvaluator\RuleEvaluator.csproj" />
   </ItemGroup>
 
+  <!-- Common packages for both frameworks -->
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.35" />
   </ItemGroup>
-</Project>
+
+  <!-- Framework-specific Npgsql versions -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+    <PackageReference Include="Npgsql" Version="7.0.8" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
+    <PackageReference Include="System.Memory" Version="4.5.5" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+    <PackageReference Include="Npgsql" Version="8.0.5" />
+  </ItemGroup>
+  </Project>
