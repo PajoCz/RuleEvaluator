@@ -1,5 +1,7 @@
 # RuleEvaluator
 
+[![CI - Windows build](https://github.com/PajoCz/RuleEvalulator/actions/workflows/ci.yml/badge.svg)](https://github.com/PajoCz/RuleEvalulator/actions/workflows/ci.yml)
+
 ## Quick links
 
 |Item                  |Link                                                                                  |

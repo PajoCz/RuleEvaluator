@@ -1,0 +1,52 @@
+name: CI - Windows build
+
+on:
+  push:
+    branches: [ "master", "main" ]
+  pull_request:
+    branches: [ "master", "main" ]
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET (for dotnet restore/build)
+        uses: actions/setup-dotnet@v3
+        with:
+          # adjust versions if you specifically need a different SDK
+          dotnet-version: '8.0.x'
+
+      - name: Show .NET info
+        run: dotnet --info
+
+      - name: Ensure MSBuild is available
+        uses: microsoft/setup-msbuild@v1
+
+      - name: Restore NuGet packages (classic projects)
+        shell: pwsh
+        run: |
+          if (Test-Path -Path "./RuleEvaluator.sln") {
+            Write-Host "Running nuget restore on solution..."
+            nuget restore ./RuleEvaluator.sln
+          } else {
+            Write-Host "Solution not found at expected path, skipping nuget restore"
+          }
+
+      - name: Dotnet restore (SDK-style / PackageReference)
+        run: |
+          if (Test-Path -Path "./RuleEvaluator.sln") {
+            dotnet restore ./RuleEvaluator.sln
+          } else {
+            echo "Solution not found; skipping dotnet restore"
+          }
+
+      - name: Build with MSBuild
+        run: msbuild ./RuleEvaluator.sln /p:Configuration=Release /m
+
+      - name: Run tests (optional)
+        # Uncomment and adjust if you have test projects targetable by dotnet test
+        # run: dotnet test ./RuleEvaluator.sln --no-build --verbosity normal
+        run: echo "Add 'dotnet test' here if you have SDK-style test projects."
