@@ -1,6 +1,6 @@
 # RuleEvaluator
 
-[![CI - Windows build](https://github.com/PajoCz/RuleEvalulator/actions/workflows/ci.yml/badge.svg)](https://github.com/PajoCz/RuleEvalulator/actions/workflows/ci.yml)
+[![CI - Windows build](https://github.com/PajoCz/RuleEvaluator/actions/workflows/ci.yml/badge.svg)](https://github.com/PajoCz/RuleEvaluator/actions/workflows/ci.yml)
 
 ## Quick links
 
