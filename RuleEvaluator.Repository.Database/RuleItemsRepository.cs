@@ -45,7 +45,8 @@ namespace RuleEvaluator.Repository.Database
         public RuleItems Load(string p_Key, TimeSpan p_CacheRelativeExpiration)
         {
             var cacheKey = $"RuleItems_{_databaseType}_{p_Key}";
-            return (RuleItems)_cacheWrapper.GetItem(cacheKey, () => LoadImpl(p_Key), p_CacheRelativeExpiration)!;
+            var result = _cacheWrapper.GetItem(cacheKey, () => LoadImpl(p_Key), p_CacheRelativeExpiration);
+            return (RuleItems)(result ?? throw new RuleLoadException($"Cache returned null for ruleset '{p_Key}'"));
         }
 
         public string GetRule(string p_Key, params object[] p_Parameters)
