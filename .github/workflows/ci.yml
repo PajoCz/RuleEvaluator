@@ -1,4 +1,4 @@
-name: CI - Windows build
+name: CI
 
 on:
   push:
@@ -7,46 +7,32 @@ on:
     branches: [ "master", "main" ]
 
 jobs:
-  build-windows:
-    runs-on: windows-latest
+  build-and-test:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup .NET (for dotnet restore/build)
-        uses: actions/setup-dotnet@v3
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
         with:
-          # adjust versions if you specifically need a different SDK
-          dotnet-version: '8.0.x'
+          dotnet-version: '10.0.x'
 
       - name: Show .NET info
         run: dotnet --info
 
-      - name: Ensure MSBuild is available
-        uses: microsoft/setup-msbuild@v1
+      - name: Restore packages
+        run: dotnet restore RuleEvaluator.sln
 
-      - name: Restore NuGet packages (classic projects)
-        shell: pwsh
-        run: |
-          if (Test-Path -Path "./RuleEvaluator.sln") {
-            Write-Host "Running nuget restore on solution..."
-            nuget restore ./RuleEvaluator.sln
-          } else {
-            Write-Host "Solution not found at expected path, skipping nuget restore"
-          }
+      - name: Build
+        run: dotnet build RuleEvaluator.sln --configuration Release --no-restore
 
-      - name: Dotnet restore (SDK-style / PackageReference)
-        run: |
-          if (Test-Path -Path "./RuleEvaluator.sln") {
-            dotnet restore ./RuleEvaluator.sln
-          } else {
-            echo "Solution not found; skipping dotnet restore"
-          }
+      - name: Run tests
+        run: dotnet test RuleEvaluator.sln --configuration Release --no-build --verbosity normal --logger "trx" --collect:"XPlat Code Coverage"
 
-      - name: Build with MSBuild
-        run: msbuild ./RuleEvaluator.sln /p:Configuration=Release /m
-
-      - name: Run tests (optional)
-        # Uncomment and adjust if you have test projects targetable by dotnet test
-        # run: dotnet test ./RuleEvaluator.sln --no-build --verbosity normal
-        run: echo "Add 'dotnet test' here if you have SDK-style test projects."
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: '**/TestResults/**'

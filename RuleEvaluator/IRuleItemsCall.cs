@@ -10,9 +10,9 @@ namespace RuleEvaluator
     public class RuleItemsCallFindCalled
     {
         public RuleItemsCallFindCalledMethod Method { get; set; }
-        public string Name { get; set; }
-        public List<object> Inputs { get; set; }
-        public List<List<object>> Outputs { get; set; }
+        public string? Name { get; set; }
+        public List<object>? Inputs { get; set; }
+        public List<List<object>>? Outputs { get; set; }
     }
 
     public enum RuleItemsCallFindCalledMethod

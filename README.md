@@ -1,58 +1,86 @@
 # RuleEvaluator
 
-[![CI - Windows build](https://github.com/PajoCz/RuleEvaluator/actions/workflows/ci.yml/badge.svg)](https://github.com/PajoCz/RuleEvaluator/actions/workflows/ci.yml)
+[![CI](https://github.com/PajoCz/RuleEvaluator/actions/workflows/ci.yml/badge.svg)](https://github.com/PajoCz/RuleEvaluator/actions/workflows/ci.yml)
 
-## Quick links
+| Item | Link |
+|:-----|:-----|
+| NuGet | [![NuGet version (RuleEvaluator)](https://img.shields.io/nuget/v/RuleEvaluator.svg?style=flat-square)](https://www.nuget.org/packages/RuleEvaluator/) |
+| NuGet Repository | [![NuGet version (RuleEvaluator.Repository.Database)](https://img.shields.io/nuget/v/RuleEvaluator.Repository.Database.svg?style=flat-square)](https://www.nuget.org/packages/RuleEvaluator.Repository.Database/) |
 
-|Item                  |Link                                                                                  |
-|:---------------------|:-------------------------------------------------------------------------------------|
-|Code coverage         | [![Coverage Status](https://coveralls.io/repos/github/PajoCz/RuleEvaluator/badge.svg?branch=master)](https://coveralls.io/github/PajoCz/RuleEvaluator?branch=master) |
-|NuGet                 |  [![NuGet version (RuleEvaluator)](https://img.shields.io/nuget/v/RuleEvaluator.svg?style=flat-square)](https://www.nuget.org/packages/RuleEvaluator/)
-|NuGet Repository      |  [![NuGet version (RuleEvaluator.Repository.Database)](https://img.shields.io/nuget/v/RuleEvaluator.Repository.Database.svg?style=flat-square)](https://www.nuget.org/packages/RuleEvaluator.Repository.Database/)
+A lightweight rule engine for .NET with regex and decimal interval matching. **No DI container required.**
 
+## Quick Start
 
-For usage, see UnitTests. One sample is:
+```csharp
+// No Windsor, no DI container — just create a factory and go
+var factory = new DefaultCellFactory();
+var rules = new RuleItems(factory);
 
-        private static IWindsorContainer _WindsorContainer
-        {
-            get
-            {
-                IWindsorContainer container = new WindsorContainer();
-                container.Install(FromAssembly.InThisApplication());
-                return container;
-            }
-        }
+// Add rules: input cells matched by regex, output cell for the result
+rules.AddRuleItem(".*", "Premium", factory.CreateCell("HighTier", CellInputOutputType.Output));
+rules.AddRuleItem(".*", "Basic",   factory.CreateCell("LowTier",  CellInputOutputType.Output));
 
-        [Test]
-        public void IntegrityTest_Find_OneFromMoreRuleItems_IntervalStringAsCellValidateFilterDecimal_ReturnsCorrectOutputValue()
-        {
-            //Arrange
-            var cf = _WindsorContainer.Resolve<ICellFactory>();
-            RuleItems items = new RuleItems(cf);
-            items.AddRuleItem(".*", ".*", ".*", "MyString", "Interval<10;15)", cf.CreateCell("ReturnValue1", CellInputOutputType.Output));
-            items.AddRuleItem(".*", ".*", ".*", "MyString", "INTERVAL<15;24)", cf.CreateCell("ReturnValue2", CellInputOutputType.Output));
+// Find the first matching rule
+var match = rules.Find("AnyProduct", "Premium");
+Console.WriteLine(match?.Output(0).FilterValue); // "HighTier"
+```
 
-            //Act
-            var found = items.Find("Anything", "Anything2", "Anything3", "MyString", 15m).Output(0).FilterValue;
+## Features
 
-            //Assert
-            Assert.AreEqual("ReturnValue2", found);
-        }
+- **Regex matching** — input cells are matched using regular expressions
+- **Decimal interval matching** — supports interval syntax like `INTERVAL<10;20>`, `Interval(5;15)`
+- **Chain of responsibility** — decimal interval matcher falls through to regex matcher automatically
+- **No DI container needed** — `DefaultCellFactory` wires the matcher pipeline for you
+- **Diagnostics API** — `FindWithDiagnostics()` / `FindAllWithDiagnostics()` return match details and timing
+- **Database loading** — load rules from MSSQL or PostgreSQL via `RuleItemsRepository`
+- **Custom exception hierarchy** — `RuleNotFoundException`, `MatcherException`, `InputParameterCountMismatchException`, etc.
 
-RuleEvaluator.Repository.Database can load RuleItems from DB. One unit test sample looks like:
+## Interval Syntax
 
-        [Test]
-        public void IntegrityTest_RepoLoad_FindOneRuleItemAndCheckFilterValue()
-        {
-            //Arrange
-            var cf = _WindsorContainer.Resolve<ICellFactory>();
+```csharp
+// Interval with inclusive/exclusive bounds
+rules.AddRuleItem("INTERVAL<10;20>",  factory.CreateCell("Result1", CellInputOutputType.Output)); // 10 <= x <= 20
+rules.AddRuleItem("INTERVAL(10;20)",  factory.CreateCell("Result2", CellInputOutputType.Output)); // 10 < x < 20
+rules.AddRuleItem("Interval<10;20)",  factory.CreateCell("Result3", CellInputOutputType.Output)); // 10 <= x < 20
 
-            //Act
-            var repo = new RuleItemsRepository(cf, ConfigurationManager.AppSettings.Get("ConnectionString"), "Ciselnik.p_GetSchemaColBySchemaKod", "Ciselnik.p_GetTranslatorDataBySchemaKod");
-            var items = repo.Load("OdhadBodu");
-            var found = items.Find("A", "B", "C", "7BN Perspektiva Důchod", 15);
-            var outputValue = found.Output(0).FilterValue;
+var match = rules.Find(15m);
+```
 
-            //Assert
-            Assert.AreEqual("C2/240", outputValue);
-        }
+## Diagnostics
+
+```csharp
+var rules = new RuleItems(new DefaultCellFactory());
+rules.EnableDiagnostics = true;
+rules.AddRuleItem(".*", factory.CreateCell("Output", CellInputOutputType.Output));
+
+var result = rules.FindWithDiagnostics("input");
+Console.WriteLine(result.HasMatch);                    // True
+Console.WriteLine(result.Diagnostics?.RulesEvaluated); // 1
+Console.WriteLine(result.Diagnostics?.Elapsed);        // 00:00:00.0001234
+```
+
+## Database Repository
+
+```csharp
+var factory = new DefaultCellFactory();
+var cache = new CacheWrapperMemory();
+var repo = new RuleItemsRepository(factory, cache, connectionString,
+    "Schema.p_GetColumns", "Schema.p_GetData", TimeSpan.FromMinutes(10));
+
+var rules = repo.Load("MyRuleSet");
+var match = rules.Find("A", "B", 15);
+```
+
+## Projects
+
+| Project | Description |
+|:--------|:------------|
+| `RuleEvaluator` | Core rule engine (no external dependencies) |
+| `RuleEvaluator.Repository.Contract` | Repository interfaces and cache abstraction |
+| `RuleEvaluator.Repository.Database` | MSSQL/PostgreSQL implementation with Dapper |
+| `RuleEvaluator.Test` | Unit tests |
+| `RuleEvaluator.Repository.Database.Test` | Integration tests (require database) |
+
+## License
+
+MIT — see [licence.txt](licence.txt)

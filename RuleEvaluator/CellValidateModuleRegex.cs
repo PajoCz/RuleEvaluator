@@ -9,23 +9,13 @@ namespace RuleEvaluator
     /// </summary>
     public class CellValidateModuleRegex: ICellValidateModule
     {
-        //always try Regex. Must be last Chainable module.
-        //private readonly ICellValidateModule _NextModule;
+        private readonly ConcurrentDictionary<string, Regex> _regexCache = new ConcurrentDictionary<string, Regex>();
 
-        //public CellValidateModuleRegex(ICellValidateModule p_NextModule)
-        //{
-        //    _NextModule = p_NextModule;
-        //}
-
-        private ConcurrentDictionary<string, Regex> _RegexCache = new ConcurrentDictionary<string, Regex>();
-        
         public bool? Validate(object p_CellFilter, object p_ValueDataForValidating)
         {
             if (p_CellFilter == null) throw new ArgumentNullException(nameof(p_CellFilter));
 
-            //always try Regex. Must be last Chainable module.
-
-            var regex = _RegexCache.GetOrAdd(p_CellFilter.ToString(), cellFilter => new Regex("^" + cellFilter + "$", RegexOptions.Singleline));
+            var regex = _regexCache.GetOrAdd(p_CellFilter.ToString()!, cellFilter => new Regex("^" + cellFilter + "$", RegexOptions.Singleline));
             return regex.IsMatch(p_ValueDataForValidating?.ToString() ?? string.Empty);
         }
     }

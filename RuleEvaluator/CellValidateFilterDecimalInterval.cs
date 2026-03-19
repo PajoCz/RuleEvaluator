@@ -43,12 +43,12 @@ namespace RuleEvaluator
 
         private static readonly Regex _Regex = new Regex(@"INTERVAL(?<FromOpenedClosed>[\(<])(?<FromNumber>[0-9]+([\.,\,][0-9]*)?);(?<ToNumber>[0-9]+([\.,\,][0-9]*)?)(?<ToOpenedClosed>[\)>])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public static CellValidateFilterDecimalInterval CreateFromString(string p_Data)
+        public static CellValidateFilterDecimalInterval? CreateFromString(string p_Data)
         {
             var match = _Regex.Match(p_Data.Replace(" ","").Replace(",","."));
             if (match.Success)
             {
-                var ci = CultureInfo.InvariantCulture.Clone() as CultureInfo;
+                var ci = (CultureInfo.InvariantCulture.Clone() as CultureInfo)!;
                 ci.NumberFormat.NumberDecimalSeparator = ".";
                 decimal from = decimal.Parse(match.Groups["FromNumber"].Value.Replace(",","."), ci);
                 bool fromIncluding = match.Groups["FromOpenedClosed"].Value == "<";
