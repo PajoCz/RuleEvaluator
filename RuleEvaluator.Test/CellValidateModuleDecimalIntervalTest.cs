@@ -19,7 +19,7 @@ namespace RuleEvaluator.Test
         public void Validate_CellFilterNull_ThrowsException()
         {
             var validator = new CellValidateModuleDecimalInterval();
-            Assert.Throws<ArgumentNullException>(() => validator.Validate(null, 10m));
+            Assert.Throws<ArgumentNullException>(() => validator.Validate(null!, 10m));
         }
 
         [Test]
@@ -27,7 +27,7 @@ namespace RuleEvaluator.Test
         {
             var validator = new CellValidateModuleDecimalInterval();
             var filter = new CellValidateFilterDecimalInterval();
-            Assert.Throws<ArgumentNullException>(() => validator.Validate(filter, null));
+            Assert.Throws<ArgumentNullException>(() => validator.Validate(filter, null!));
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace RuleEvaluator.Test
         {
             var validator = new CellValidateModuleDecimalInterval();
             var filter = new CellValidateFilterDecimalInterval(10, true, 20, true);
-            Assert.IsTrue(validator.Validate(filter, "10"));
+            Assert.That(validator.Validate(filter, "10"), Is.True);
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace RuleEvaluator.Test
         {
             var validator = new CellValidateModuleDecimalInterval();
             var filter = new CellValidateFilterDecimalInterval(10, true, 20, true);
-            Assert.IsTrue(validator.Validate(filter, 10));
+            Assert.That(validator.Validate(filter, 10), Is.True);
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace RuleEvaluator.Test
         {
             var validator = new CellValidateModuleDecimalInterval();
             var filter = new CellValidateFilterDecimalInterval(10, true, 20, true);
-            Assert.IsTrue(validator.Validate(filter, 10d));
+            Assert.That(validator.Validate(filter, 10d), Is.True);
         }
 
         [Test]
@@ -67,7 +67,7 @@ namespace RuleEvaluator.Test
         {
             var validator = new CellValidateModuleDecimalInterval();
             var filter = new CellValidateFilterDecimalInterval(10, true, 20, true);
-            Assert.IsTrue(validator.Validate(filter, 10f));
+            Assert.That(validator.Validate(filter, 10f), Is.True);
         }
     }
 }

@@ -7,19 +7,18 @@ namespace RuleEvaluator
     /// </summary>
     public class CellValidateModuleDecimalInterval : ICellValidateModule
     {
-        private readonly ICellValidateModule _NextModule;
+        private readonly ICellValidateModule? _nextModule;
 
         public CellValidateModuleDecimalInterval()
         {
         }
 
         /// <summary>
-        /// ctor with ICellValidateModule is used by Windsor Castle. This module is used in Chain of Responsibility design pattern.
+        /// Constructor with next module in chain of responsibility.
         /// </summary>
-        /// <param name="p_NextModule"></param>
         public CellValidateModuleDecimalInterval(ICellValidateModule p_NextModule)
         {
-            _NextModule = p_NextModule;
+            _nextModule = p_NextModule;
         }
 
         public bool? Validate(object p_CellFilter, object p_ValueDataForValidating)
@@ -27,19 +26,18 @@ namespace RuleEvaluator
             var cellFilter = p_CellFilter;
             if (cellFilter != null && !(cellFilter is CellValidateFilterDecimalInterval))
             {
-                cellFilter = CellValidateFilterDecimalInterval.CreateFromString(p_CellFilter.ToString());
+                cellFilter = CellValidateFilterDecimalInterval.CreateFromString(p_CellFilter.ToString()!);
             }
 
-            if (cellFilter == null && _NextModule != null)
+            if (cellFilter == null && _nextModule != null)
             {   //try another module, p_CellFilter is in unknown format
-                return _NextModule.Validate(p_CellFilter, p_ValueDataForValidating);
+                return _nextModule.Validate(p_CellFilter, p_ValueDataForValidating);
             }
 
             if (cellFilter == null) throw new ArgumentNullException(nameof(p_CellFilter));
             if (p_ValueDataForValidating == null) throw new ArgumentNullException(nameof(p_ValueDataForValidating));
             if (!(p_ValueDataForValidating is decimal))
             {
-                //p_ValueDataForValidating = (decimal)Convert.ChangeType(p_ValueDataForValidating, typeof (decimal));
                 p_ValueDataForValidating = Convert.ToDecimal(p_ValueDataForValidating);
             }
 

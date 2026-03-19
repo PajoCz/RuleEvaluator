@@ -1,19 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net472;net8.0</TargetFrameworks>
+    <TargetFramework>net10.0</TargetFramework>
     <OutputType>Library</OutputType>
     <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
     <NoWarn>CS1591</NoWarn>
-    
-    <!-- Disable auto-generated assembly attributes to avoid conflicts with AssemblyInfo.cs -->
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    
+
     <!-- NuGet Package Properties -->
     <PackageId>RuleEvaluator.Repository.Contract</PackageId>
-    <Version>4.0.0</Version>
+    <Version>5.0.0</Version>
     <Authors>PajoCz</Authors>
     <Company>PajoCz</Company>
-    <Description>Repository contracts for RuleEvaluator with support for .NET Framework 4.7.2 and .NET 8.0</Description>
+    <Description>Repository contracts for RuleEvaluator</Description>
     <PackageProjectUrl>https://github.com/PajoCz/RuleEvaluator</PackageProjectUrl>
     <RepositoryUrl>https://github.com/PajoCz/RuleEvaluator</RepositoryUrl>
     <RepositoryType>git</RepositoryType>

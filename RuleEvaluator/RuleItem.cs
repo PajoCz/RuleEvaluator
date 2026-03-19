@@ -4,22 +4,21 @@ using System.Collections.Generic;
 namespace RuleEvaluator
 {
     /// <summary>
-    /// One rule item with composition of List<ICell> with ValidateInput method
+    /// One rule item composed of a list of cells, with ValidateInput method.
     /// </summary>
     public class RuleItem
     {
         public readonly List<ICell> Cells;
 
-        private List<ICell> _CellsOnlyInputCached;
-
-        private List<ICell> _CellsOnlyOutputCached;
+        private List<ICell>? _cellsOnlyInputCached;
+        private List<ICell>? _cellsOnlyOutputCached;
 
         public RuleItem(ICellFactory p_Factory, params object[] p_Cells)
         {
             Cells = new List<ICell>(p_Cells.Length);
             foreach (var cell in p_Cells)
             {
-                Cells.Add(cell is ICell ? cell as ICell : p_Factory.CreateCell(cell));
+                Cells.Add(cell is ICell c ? c : p_Factory.CreateCell(cell));
             }
         }
 
@@ -27,11 +26,8 @@ namespace RuleEvaluator
         {
             get
             {
-                if (_CellsOnlyInputCached == null)
-                {
-                    _CellsOnlyInputCached = Cells.FindAll(c => c.InputOutputType == CellInputOutputType.Input);
-                }
-                return _CellsOnlyInputCached;
+                _cellsOnlyInputCached ??= Cells.FindAll(c => c.InputOutputType == CellInputOutputType.Input);
+                return _cellsOnlyInputCached;
             }
         }
 
@@ -39,22 +35,15 @@ namespace RuleEvaluator
         {
             get
             {
-                if (_CellsOnlyOutputCached == null)
-                {
-                    _CellsOnlyOutputCached = Cells.FindAll(c => c.InputOutputType == CellInputOutputType.Output);
-                }
-                return _CellsOnlyOutputCached;
+                _cellsOnlyOutputCached ??= Cells.FindAll(c => c.InputOutputType == CellInputOutputType.Output);
+                return _cellsOnlyOutputCached;
             }
         }
 
-        public bool ValidateInput(string p_RuleItemsName, params object[] p_Data)
+        public bool ValidateInput(string? p_RuleItemsName, params object[] p_Data)
         {
             if (p_Data?.Length != CellsOnlyInput.Count)
-                throw new ArgumentOutOfRangeException(
-                    string.IsNullOrEmpty(p_RuleItemsName)
-                        ? $"Input data with {p_Data?.Length} parameters but expected is {CellsOnlyInput.Count} input parameters"
-                        : $"RuleEvaluator '{p_RuleItemsName}' finding with {p_Data?.Length} parameters as input data but expected is {CellsOnlyInput.Count} input parameters"
-                    , nameof(p_Data));
+                throw new InputParameterCountMismatchException(p_RuleItemsName, CellsOnlyInput.Count, p_Data?.Length ?? 0);
 
             for (var i = 0; i < CellsOnlyInput.Count; i++)
             {
@@ -71,6 +60,6 @@ namespace RuleEvaluator
             return CellsOnlyOutput[p_OutputIndex];
         }
 
-        public ICell PrimaryKey => Cells.Find(c => c.InputOutputType == CellInputOutputType.PrimaryKey);
+        public ICell? PrimaryKey => Cells.Find(c => c.InputOutputType == CellInputOutputType.PrimaryKey);
     }
 }

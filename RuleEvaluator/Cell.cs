@@ -4,22 +4,21 @@ namespace RuleEvaluator
 {
     public class Cell : ICell
     {
+        private readonly ICellValidateModule _cellValidateModule;
+
         /// <summary>
-        /// IoC injected validate module
-        /// </summary>
-        private readonly ICellValidateModule _CellValidateModule;
-        /// <summary>
-        /// Cell filter value
+        /// Cell filter value (the pattern or value to match against).
         /// </summary>
         public object FilterValue { get; set; }
+
         /// <summary>
-        /// Input cell value means used for looking in Validate method. Output cell means used for getting data from Validated RuleItem
+        /// Whether this cell is Input, Output, or PrimaryKey.
         /// </summary>
         public CellInputOutputType InputOutputType { get; set; }
 
         public Cell(ICellValidateModule p_CellValidateModule, object p_FilterValue, CellInputOutputType p_CellInputOutputTypeType = CellInputOutputType.Input)
         {
-            _CellValidateModule = p_CellValidateModule;
+            _cellValidateModule = p_CellValidateModule ?? throw new ArgumentNullException(nameof(p_CellValidateModule));
             FilterValue = p_FilterValue;
             InputOutputType = p_CellInputOutputTypeType;
         }
@@ -28,10 +27,10 @@ namespace RuleEvaluator
         {
             if (FilterValue == null) throw new ArgumentNullException(nameof(FilterValue));
 
-            bool? res = _CellValidateModule.Validate(FilterValue, p_Value);
+            bool? res = _cellValidateModule.Validate(FilterValue, p_Value);
             if (!res.HasValue)
             {
-                throw new Exception("Uknown validate result from ICellValidateModule instances");
+                throw new MatcherException("Unknown validate result from ICellValidateModule instances");
             }
             return res.Value;
         }

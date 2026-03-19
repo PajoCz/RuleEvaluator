@@ -65,11 +65,11 @@ namespace RuleEvaluator.Test
         public void CreateFromString_Correct(string p_Text, decimal p_From, bool p_FromIncluding, decimal p_To, bool p_ToIncluding)
         {
             var res = CellValidateFilterDecimalInterval.CreateFromString(p_Text);
-            Assert.IsNotNull(res, "Text is not in syntax of Interval");
-            Assert.AreEqual(p_From, res.From);
-            Assert.AreEqual(p_FromIncluding, res.FromClosedIncluding);
-            Assert.AreEqual(p_To, res.To);
-            Assert.AreEqual(p_ToIncluding, res.ToClosedIncluding);
+            Assert.That(res, Is.Not.Null, "Text is not in syntax of Interval");
+            Assert.That(res!.From, Is.EqualTo(p_From));
+            Assert.That(res.FromClosedIncluding, Is.EqualTo(p_FromIncluding));
+            Assert.That(res.To, Is.EqualTo(p_To));
+            Assert.That(res.ToClosedIncluding, Is.EqualTo(p_ToIncluding));
         }
 
         [TestCase("INTERVALY(10;2000)")]
@@ -77,7 +77,7 @@ namespace RuleEvaluator.Test
         [TestCase("INTERVAL(A;B)")]
         public void CreateFromString_IncorrectReturnNull(string p_Text)
         {
-            Assert.IsNull(CellValidateFilterDecimalInterval.CreateFromString(p_Text));
+            Assert.That(CellValidateFilterDecimalInterval.CreateFromString(p_Text), Is.Null);
         }
     }
 }
